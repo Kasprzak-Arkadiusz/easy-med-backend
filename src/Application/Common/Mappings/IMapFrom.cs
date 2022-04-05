@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 
-namespace easy_med_backend.Application.Common.Mappings;
+namespace EasyMed.Application.Common.Mappings;
 
 public interface IMapFrom<T>
 {

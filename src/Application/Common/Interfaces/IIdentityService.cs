@@ -1,6 +1,6 @@
-﻿using easy_med_backend.Application.Common.Models;
+﻿using EasyMed.Application.Common.Models;
 
-namespace easy_med_backend.Application.Common.Interfaces;
+namespace EasyMed.Application.Common.Interfaces;
 
 public interface IIdentityService
 {

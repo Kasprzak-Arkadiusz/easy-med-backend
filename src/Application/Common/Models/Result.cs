@@ -1,4 +1,4 @@
-﻿namespace easy_med_backend.Application.Common.Models;
+﻿namespace EasyMed.Application.Common.Models;
 
 public class Result
 {

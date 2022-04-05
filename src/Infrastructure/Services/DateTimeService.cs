@@ -1,6 +1,6 @@
-﻿using easy_med_backend.Application.Common.Interfaces;
+﻿using EasyMed.Application.Common.Interfaces;
 
-namespace easy_med_backend.Infrastructure.Services;
+namespace EasyMed.Infrastructure.Services;
 
 public class DateTimeService : IDateTime
 {

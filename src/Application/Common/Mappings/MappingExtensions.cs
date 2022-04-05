@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using easy_med_backend.Application.Common.Models;
+using EasyMed.Application.Common.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace easy_med_backend.Application.Common.Mappings;
+namespace EasyMed.Application.Common.Mappings;
 
 public static class MappingExtensions
 {

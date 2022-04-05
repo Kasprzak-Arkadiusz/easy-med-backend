@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using Duende.IdentityServer.EntityFramework.Options;
-using easy_med_backend.Application.Common.Interfaces;
-using easy_med_backend.Infrastructure.Identity;
+using EasyMed.Application.Common.Interfaces;
+using EasyMed.Infrastructure.Identity;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
-namespace easy_med_backend.Infrastructure.Persistence;
+namespace EasyMed.Infrastructure.Persistence;
 
 public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
 {

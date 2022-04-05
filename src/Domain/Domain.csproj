@@ -2,8 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
-        <RootNamespace>easy_med_backend.Domain</RootNamespace>
-        <AssemblyName>easy_med_backend.Domain</AssemblyName>
+        <RootNamespace>EasyMed.Domain</RootNamespace>
+        <AssemblyName>EasyMed.Domain</AssemblyName>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>

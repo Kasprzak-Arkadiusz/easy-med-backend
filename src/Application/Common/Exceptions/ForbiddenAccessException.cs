@@ -1,3 +1,3 @@
-﻿namespace easy_med_backend.Application.Common.Exceptions;
+﻿namespace EasyMed.Application.Common.Exceptions;
 
 public class ForbiddenAccessException : Exception { }

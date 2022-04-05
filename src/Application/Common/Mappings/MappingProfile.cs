@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using AutoMapper;
 
-namespace easy_med_backend.Application.Common.Mappings;
+namespace EasyMed.Application.Common.Mappings;
 
 public class MappingProfile : Profile
 {

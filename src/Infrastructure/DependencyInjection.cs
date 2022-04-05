@@ -1,14 +1,14 @@
-﻿using easy_med_backend.Application.Common.Interfaces;
-using easy_med_backend.Infrastructure.Identity;
-using easy_med_backend.Infrastructure.Persistence;
-using easy_med_backend.Infrastructure.Services;
+﻿using EasyMed.Application.Common.Interfaces;
+using EasyMed.Infrastructure.Identity;
+using EasyMed.Infrastructure.Persistence;
+using EasyMed.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace easy_med_backend.Infrastructure;
+namespace EasyMed.Infrastructure;
 
 public static class DependencyInjection
 {

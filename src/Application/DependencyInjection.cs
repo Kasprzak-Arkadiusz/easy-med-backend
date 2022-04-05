@@ -3,7 +3,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace easy_med_backend.Application;
+namespace EasyMed.Application;
 
 public static class DependencyInjection
 {

@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using easy_med_backend.Application.Common.Interfaces;
-using easy_med_backend.Application.Common.Models;
+using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Common.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace easy_med_backend.Infrastructure.Identity;
+namespace EasyMed.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {

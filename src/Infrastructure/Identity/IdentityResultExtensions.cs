@@ -1,7 +1,7 @@
-﻿using easy_med_backend.Application.Common.Models;
+﻿using EasyMed.Application.Common.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace easy_med_backend.Infrastructure.Identity;
+namespace EasyMed.Infrastructure.Identity;
 
 public static class IdentityResultExtensions
 {
