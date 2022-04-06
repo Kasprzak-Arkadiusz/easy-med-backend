@@ -235,3 +235,6 @@ _Pvt_Extensions
 /NDependOut
 /easy_med_backend.ndproj
 /.mfractor
+
+# Appsettings file
+**/appsettings.json

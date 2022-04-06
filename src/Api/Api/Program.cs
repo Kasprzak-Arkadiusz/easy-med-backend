@@ -1,6 +1,13 @@
+using EasyMed.Infrastructure;
+
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+ConfigurationManager configuration = builder.Configuration;
+
+var infrastructureSettings = new InfrastructureSettings();
+configuration.Bind(nameof(InfrastructureSettings), infrastructureSettings);
+builder.Services.AddInfrastructure(infrastructureSettings);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
