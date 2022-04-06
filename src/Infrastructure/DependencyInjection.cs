@@ -1,5 +1,4 @@
 ﻿using EasyMed.Application.Common.Interfaces;
-using EasyMed.Infrastructure.Identity;
 using EasyMed.Infrastructure.Persistence;
 using EasyMed.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -12,16 +11,15 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services,
         InfrastructureSettings settings)
     {
-        services.AddDbContext<ApplicationDbContext>(options =>
+        services.AddSingleton(settings);
+            
+        services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
         {
             options.UseNpgsql(settings.DbConnectionString);
             options.EnableDetailedErrors();
         });
 
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
         services.AddTransient<IDateTime, DateTimeService>();
-        services.AddTransient<IIdentityService, IdentityService>();
 
         return services;
     }

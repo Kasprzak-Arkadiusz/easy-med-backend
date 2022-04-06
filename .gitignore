@@ -238,3 +238,6 @@ _Pvt_Extensions
 
 # Appsettings file
 **/appsettings.json
+
+# Dot Settings file
+Backend.sln.DotSettings
