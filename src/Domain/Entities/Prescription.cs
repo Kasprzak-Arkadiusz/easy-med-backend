@@ -14,13 +14,16 @@ public class Prescription : IEntity
 
     public ICollection<Medicine> Medicines { get; private set; }
 
-    private Prescription(DateOnly dateOfIssue)
+    private Prescription(DateOnly dateOfIssue, Doctor doctor, Patient patient, ICollection<Medicine> medicines)
     {
         DateOfIssue = dateOfIssue;
+        Doctor = doctor;
+        Patient = patient;
+        Medicines = medicines;
     }
 
-    public static Prescription Create(DateOnly dateOfIssue)
+    public static Prescription Create(DateOnly dateOfIssue, Doctor doctor, Patient patient, ICollection<Medicine> medicines)
     {
-        return new Prescription(dateOfIssue);
+        return new Prescription(dateOfIssue, doctor, patient, medicines);
     }
 }

@@ -10,15 +10,23 @@ public class Schedule : IEntity
     public TimeOnly EndTime { get; private set; }
     public Doctor Doctor { get; private set; }
 
-    private Schedule(string dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    private Schedule(string dayOfWeek, TimeOnly startTime, TimeOnly endTime, Doctor doctor)
     {
         DayOfWeek = dayOfWeek;
         StartTime = startTime;
         EndTime = endTime;
+        Doctor = doctor;
     }
 
-    public static Schedule Create(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    public static Schedule Create(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime, Doctor doctor)
     {
-        return new Schedule(dayOfWeek.ToString(), startTime, endTime);
+        return new Schedule(dayOfWeek.ToString(), startTime, endTime, doctor);
+    }
+
+    public void ChangeSchedule(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    {
+        DayOfWeek = dayOfWeek.ToString();
+        StartTime = startTime;
+        EndTime = endTime;
     }
 }

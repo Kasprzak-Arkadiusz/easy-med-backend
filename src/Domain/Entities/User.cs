@@ -17,4 +17,12 @@ public abstract class User : IEntity
         EmailAddress = emailAddress;
         TelephoneNumber = telephoneNumber;
     }
+
+    protected void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        EmailAddress = emailAddress;
+        TelephoneNumber = telephoneNumber;
+    }
 }

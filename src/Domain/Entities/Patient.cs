@@ -17,4 +17,11 @@ public class Patient : User
     {
         return new Patient(firstName, lastName, emailAddress, telephoneNumber, pesel);
     }
+    
+    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber,
+        string pesel)
+    {
+        base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
+        Pesel = pesel;
+    }
 }

@@ -13,14 +13,21 @@ public class Visit : IEntity
     public Patient Patient { get; private set; }
     public int PatientId { get; private set; }
 
-    private Visit(DateTime dateTime, bool isCompleted)
+    private Visit(DateTime dateTime, bool isCompleted, Doctor doctor, Patient patient)
     {
         DateTime = dateTime;
         IsCompleted = isCompleted;
+        Doctor = doctor;
+        Patient = patient;
     }
 
-    public static Visit Create(DateTime dateTime)
+    public static Visit Create(DateTime dateTime, Doctor doctor, Patient patient)
     {
-        return new Visit(dateTime, false);
+        return new Visit(dateTime, false, doctor, patient);
+    }
+
+    public void Complete()
+    {
+        IsCompleted = true;
     }
 }

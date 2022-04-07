@@ -14,15 +14,17 @@ public class Review : IEntity
     public int DoctorId { get; private set; }
     public Doctor Doctor { get; private set; }
 
-    private Review(string description, short rating, DateOnly date)
+    private Review(string description, short rating, DateOnly date, Doctor doctor, Patient patient)
     {
         Description = description;
         Rating = rating;
         Date = date;
+        Doctor = doctor;
+        Patient = patient;
     }
 
-    public static Review Create(string description, short rating, DateOnly date)
+    public static Review Create(string description, short rating, DateOnly date, Doctor doctor, Patient patient)
     {
-        return new Review(description, rating, date);
+        return new Review(description, rating, date, doctor, patient);
     }
 }

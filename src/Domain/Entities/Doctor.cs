@@ -13,7 +13,7 @@ public class Doctor : User
     public ICollection<Review> Reviews { get; private set; }
     public ICollection<Schedule> Schedules { get; private set; }
     public ICollection<Visit> Visits { get; private set; }
-    
+
     private Doctor(string firstName, string lastName, string emailAddress, string telephoneNumber, string description,
         string medicalSpecialization)
         : base(firstName, lastName, emailAddress, telephoneNumber)
@@ -26,5 +26,17 @@ public class Doctor : User
         string description, MedicalSpecialization specialization)
     {
         return new Doctor(firstName, lastName, emailAddress, telephoneNumber, description, specialization.ToString());
+    }
+
+    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber,
+        string description)
+    {
+        base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
+        Description = description;
+    }
+    
+    public void ChangeMedicalSpecialization(MedicalSpecialization specialization)
+    {
+        MedicalSpecialization = specialization.ToString();
     }
 }
