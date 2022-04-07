@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+using Api.Extensions;
 using EasyMed.Infrastructure;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -9,24 +11,21 @@ var infrastructureSettings = new InfrastructureSettings();
 configuration.Bind(nameof(InfrastructureSettings), infrastructureSettings);
 builder.Services.AddInfrastructure(infrastructureSettings);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(x =>
+    {
+        x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
+builder.Services.AddSwaggerDocumentation();
 
 WebApplication app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

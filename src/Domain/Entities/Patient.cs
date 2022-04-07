@@ -1,27 +1,28 @@
-﻿namespace EasyMed.Domain.Entities;
+﻿using EasyMed.Domain.Enums;
+
+namespace EasyMed.Domain.Entities;
 
 public class Patient : User
 {
-    public string Pesel { get; private set; }
+    public string? PersonalIdentityNumber { get; private set; }
     public ICollection<Review> Reviews { get; private set; }
     public ICollection<Prescription> Prescriptions { get; private set; }
     public ICollection<Visit> Visits { get; private set; }
-    
-    private Patient(string firstName, string lastName, string emailAddress, string telephoneNumber, string pesel) 
-        : base(firstName, lastName, emailAddress, telephoneNumber)
+
+    public static Patient Create(string emailAddress, string passwordHash)
     {
-        Pesel = pesel;
+        return new Patient
+        {
+            EmailAddress = emailAddress,
+            PasswordHash = passwordHash,
+            Role = Role.Patient
+        };
     }
 
-    public static Patient Create(string firstName, string lastName, string emailAddress, string telephoneNumber, string pesel)
-    {
-        return new Patient(firstName, lastName, emailAddress, telephoneNumber, pesel);
-    }
-    
-    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber,
-        string pesel)
+    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress,
+        string telephoneNumber, string personalIdentityNumber)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
-        Pesel = pesel;
+        PersonalIdentityNumber = personalIdentityNumber;
     }
 }

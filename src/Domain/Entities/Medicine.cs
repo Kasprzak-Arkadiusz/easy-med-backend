@@ -8,16 +8,15 @@ public class Medicine : IEntity
     public string Name { get; private set; }
     public string Capacity { get; private set; }
     public Prescription Prescription { get; private set; }
-
-    private Medicine(string name, string capacity)
-    {
-        Name = name;
-        Capacity = capacity;
-    }
+    
 
     public static Medicine Create(string name, string capacity)
     {
-        return new Medicine(name, capacity);
+        return new Medicine
+        {
+           Name = name, 
+           Capacity = capacity
+        };
     }
     
 }

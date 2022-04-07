@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace EasyMed.Infrastructure.Persistence.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,15 +32,17 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PasswordHash = table.Column<string>(type: "text", nullable: false),
+                    Role = table.Column<int>(type: "integer", nullable: false),
+                    EmailAddress = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
                     LastName = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
-                    EmailAddress = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     TelephoneNumber = table.Column<string>(type: "char(9)", maxLength: 9, nullable: false),
                     Discriminator = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     MedicalSpecialization = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
                     OfficeLocationId = table.Column<int>(type: "integer", nullable: true),
-                    Pesel = table.Column<string>(type: "char(11)", maxLength: 11, nullable: true)
+                    PersonalIdentityNumber = table.Column<string>(type: "char(11)", maxLength: 11, nullable: true)
                 },
                 constraints: table =>
                 {
