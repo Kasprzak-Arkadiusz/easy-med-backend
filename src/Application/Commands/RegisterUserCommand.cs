@@ -52,7 +52,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         var existingUser = await _applicationDbContext.Users
             .FirstOrDefaultAsync(u => u.EmailAddress == command.EmailAddress, cancellationToken);
 
-        if (existingUser == default)
+        if (existingUser != default)
         {
             throw new BadRequestException("User with given email address already exists");
         }

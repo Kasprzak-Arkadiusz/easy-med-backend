@@ -2,24 +2,26 @@
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+#pragma warning disable CS8618
 
 namespace EasyMed.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options) { }
+    public DbSet<Doctor> Doctors { get; set; }
+    public DbSet<Medicine> Medicines { get; set; }
+    public DbSet<OfficeLocation> OfficeLocations { get; set; }
+    public DbSet<Patient> Patients { get; set; }
+    public DbSet<Prescription> Prescriptions { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+    public DbSet<Schedule> Schedules { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Visit> Visits { get; set; }
 
-    public DbSet<Doctor> Doctors { get; }
-    public DbSet<Medicine> Medicines { get; }
-    public DbSet<OfficeLocation> OfficeLocations { get; }
-    public DbSet<Patient> Patients { get; }
-    public DbSet<Prescription> Prescriptions { get; }
-    public DbSet<Review> Reviews { get; }
-    public DbSet<Schedule> Schedules { get; }
-    public DbSet<User> Users { get; }
-    public DbSet<Visit> Visits { get; }
-    
+    public ApplicationDbContext(DbContextOptions options) : base(options)
+    {
+    }
+
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         int result = await base.SaveChangesAsync(cancellationToken);

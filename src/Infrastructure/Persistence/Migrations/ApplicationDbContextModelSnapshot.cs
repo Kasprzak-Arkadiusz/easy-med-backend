@@ -198,13 +198,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("Role")
-                        .HasColumnType("integer");
-
                     b.Property<string>("TelephoneNumber")
                         .IsRequired()
                         .HasMaxLength(9)
@@ -273,7 +266,8 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 {
                     b.HasBaseType("EasyMed.Domain.Entities.User");
 
-                    b.Property<string>("PersonalIdentityNumber")
+                    b.Property<string>("Pesel")
+                        .IsRequired()
                         .HasMaxLength(11)
                         .HasColumnType("char(11)");
 

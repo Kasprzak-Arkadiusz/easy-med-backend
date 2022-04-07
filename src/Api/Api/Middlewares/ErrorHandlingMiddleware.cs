@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using EasyMed.Application.Common.Exceptions;
 
 namespace Api.Middlewares;
