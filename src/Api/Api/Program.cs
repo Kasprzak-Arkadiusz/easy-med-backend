@@ -74,4 +74,9 @@ app.UseCors("FrontendPolicy");
 app.UseAuthorization();
 app.MapControllers();
 
+var port = Environment.GetEnvironmentVariable("PORT");
+if (port != null)
+{
+    app.Run("http://*:" + port);
+}
 app.Run();
