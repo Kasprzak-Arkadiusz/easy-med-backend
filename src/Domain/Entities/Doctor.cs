@@ -1,4 +1,5 @@
 ﻿using EasyMed.Domain.Enums;
+using static BCrypt.Net.BCrypt;
 
 namespace EasyMed.Domain.Entities;
 
@@ -13,12 +14,12 @@ public class Doctor : User
     public ICollection<Schedule> Schedules { get; private set; }
     public ICollection<Visit> Visits { get; private set; }
 
-    public static Doctor Create(string emailAddress, string passwordHash)
+    public static Doctor Create(string emailAddress, string password)
     {
         return new Doctor
         {
             EmailAddress = emailAddress,
-            PasswordHash = passwordHash,
+            PasswordHash = HashPassword(password),
             Role = Role.Doctor
         };
     }

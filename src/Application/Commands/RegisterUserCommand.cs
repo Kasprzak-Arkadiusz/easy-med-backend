@@ -1,26 +1,14 @@
 using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
-using EasyMed.Application.Validators;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Entities;
 using EasyMed.Domain.Enums;
-using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 #pragma warning disable CA2208
 
 namespace EasyMed.Application.Commands;
-
-public class RegisterUserCommandValidator : AbstractValidator<RegisterUserCommand>
-{
-    public RegisterUserCommandValidator()
-    {
-        RuleFor(command => command.EmailAddress).NotEmpty().EmailAddress();
-        RuleFor(command => command.Password).NotEmpty().SetValidator(new PasswordValidator());
-        RuleFor(command => command.RegisterAs).IsInEnum();
-    }
-}
 
 public class RegisterUserCommand : IRequest<UserViewModel>
 {
@@ -67,6 +55,6 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         await _applicationDbContext.Users.AddAsync(user, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
         
-        return _mapper.Map<UserViewModel>(existingUser);
+        return _mapper.Map<UserViewModel>(user);
     }
 }

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyMed.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220407210735_InitialMigration")]
+    [Migration("20220407221608_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -191,12 +191,10 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
@@ -208,7 +206,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("TelephoneNumber")
-                        .IsRequired()
                         .HasMaxLength(9)
                         .HasColumnType("char(9)");
 
