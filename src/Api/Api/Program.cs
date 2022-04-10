@@ -4,9 +4,12 @@ using System.Text.Json.Serialization;
 using Api.Extensions;
 using Api.Middlewares;
 using EasyMed.Application;
+using EasyMed.Application.Common.Interfaces;
 using EasyMed.Infrastructure;
+using EasyMed.Infrastructure.Persistence;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -77,6 +80,11 @@ app.MapControllers();
 var port = Environment.GetEnvironmentVariable("PORT");
 if (port != null)
 {
+    using (var scope = app.Services.CreateScope())
+    {
+        var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dataContext.Database.Migrate();
+    }
     app.Run("http://*:" + port);
 }
 app.Run();
