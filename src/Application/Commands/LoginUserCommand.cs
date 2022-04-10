@@ -43,9 +43,9 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthVie
             throw new NotFoundException("User not found");
         }
 
-        if (Verify(command.Password, user.PasswordHash))
+        if (!Verify(command.Password, user.PasswordHash))
         {
-            throw new AuthenticationException("Invalid credentials");
+            throw new UnauthorizedException("Invalid credentials");
         }
 
         var accessToken = _securityTokenService.GenerateAccessTokenForUser(user.Id, user.EmailAddress, user.Role);

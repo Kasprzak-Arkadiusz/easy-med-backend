@@ -1,5 +1,3 @@
-using EasyMed.Application.Common.Mappings;
-
 namespace EasyMed.Application.ViewModels;
 
 public class AuthViewModel
