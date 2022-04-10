@@ -14,7 +14,6 @@ public class MedicineConfiguration : IEntityTypeConfiguration<Medicine>
         builder.Property(m => m.Capacity)
             .HasMaxLength(40)
             .IsRequired();
-        
         builder.HasOne(m => m.Prescription)
             .WithMany(p => p.Medicines);
     }

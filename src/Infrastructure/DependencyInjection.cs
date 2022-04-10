@@ -16,7 +16,6 @@ public static class DependencyInjection
         services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
         {
             options.UseNpgsql(settings.DbConnectionString);
-            options.EnableDetailedErrors();
         });
 
         services.AddTransient<IDateTime, DateTimeService>();

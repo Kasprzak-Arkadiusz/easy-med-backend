@@ -15,7 +15,6 @@ public class DoctorConfiguration : UserConfiguration<Doctor>
         builder.Property(d => d.MedicalSpecialization)
             .HasMaxLength(40)
             .IsRequired();
-
         builder.HasOne(d => d.OfficeLocation)
             .WithOne(ol => ol.Doctor)
             .HasForeignKey<Doctor>(d => d.OfficeLocationId)

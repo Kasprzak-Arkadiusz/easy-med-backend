@@ -10,7 +10,7 @@ public class PatientConfiguration : UserConfiguration<Patient>
     {
         base.Configure(builder);
         
-        builder.Property(p => p.Pesel)
+        builder.Property(p => p.PersonalIdentityNumber)
             .HasColumnType("char")
             .HasMaxLength(11);
     }

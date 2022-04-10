@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyMed.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220406202954_Init")]
-    partial class Init
+    [Migration("20220407221608_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -191,17 +191,21 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(50)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
-                    b.Property<string>("TelephoneNumber")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("TelephoneNumber")
                         .HasMaxLength(9)
                         .HasColumnType("char(9)");
 
@@ -268,8 +272,7 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 {
                     b.HasBaseType("EasyMed.Domain.Entities.User");
 
-                    b.Property<string>("Pesel")
-                        .IsRequired()
+                    b.Property<string>("PersonalIdentityNumber")
                         .HasMaxLength(11)
                         .HasColumnType("char(11)");
 

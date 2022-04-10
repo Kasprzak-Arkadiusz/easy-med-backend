@@ -12,7 +12,6 @@ public class VisitConfiguration : IEntityTypeConfiguration<Visit>
             .IsRequired();
         builder.Property(v => v.IsCompleted)
             .IsRequired();
-
         builder.HasKey(v => v.Id);
         builder.HasOne(v => v.Doctor)
             .WithMany(d => d.Visits)
