@@ -7,8 +7,6 @@ public class Doctor : User
 {
     public string Description { get; private set; }
     public string MedicalSpecialization { get; private set; }
-    public int OfficeLocationId { get; private set; }
-    public OfficeLocation OfficeLocation { get; private set; }
     public ICollection<Prescription> Prescriptions { get; private set; }
     public ICollection<Review> Reviews { get; private set; }
     public ICollection<Schedule> Schedules { get; private set; }

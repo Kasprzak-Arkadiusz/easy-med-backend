@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyMed.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220407221608_InitialMigration")]
+    [Migration("20220411112127_InitialMigration")]
     partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,9 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
+                    b.Property<int>("DoctorId")
+                        .HasColumnType("integer");
+
                     b.Property<string>("House")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -81,6 +84,8 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasColumnType("character varying(40)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("OfficeLocations");
                 });
@@ -259,12 +264,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("character varying(40)");
 
-                    b.Property<int>("OfficeLocationId")
-                        .HasColumnType("integer");
-
-                    b.HasIndex("OfficeLocationId")
-                        .IsUnique();
-
                     b.HasDiscriminator().HasValue("Doctor");
                 });
 
@@ -288,6 +287,17 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("EasyMed.Domain.Entities.OfficeLocation", b =>
+                {
+                    b.HasOne("EasyMed.Domain.Entities.Doctor", "Doctor")
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Doctor");
                 });
 
             modelBuilder.Entity("EasyMed.Domain.Entities.Prescription", b =>
@@ -356,23 +366,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("EasyMed.Domain.Entities.Doctor", b =>
-                {
-                    b.HasOne("EasyMed.Domain.Entities.OfficeLocation", "OfficeLocation")
-                        .WithOne("Doctor")
-                        .HasForeignKey("EasyMed.Domain.Entities.Doctor", "OfficeLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("OfficeLocation");
-                });
-
-            modelBuilder.Entity("EasyMed.Domain.Entities.OfficeLocation", b =>
-                {
-                    b.Navigation("Doctor")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("EasyMed.Domain.Entities.Prescription", b =>
