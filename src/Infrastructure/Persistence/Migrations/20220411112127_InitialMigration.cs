@@ -11,22 +11,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "OfficeLocations",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Street = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
-                    House = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    City = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
-                    PostalCode = table.Column<string>(type: "nchar", maxLength: 6, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_OfficeLocations", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -41,16 +25,32 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                     Discriminator = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
                     MedicalSpecialization = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
-                    OfficeLocationId = table.Column<int>(type: "integer", nullable: true),
                     PersonalIdentityNumber = table.Column<string>(type: "char(11)", maxLength: 11, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OfficeLocations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Street = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    House = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    City = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: false),
+                    PostalCode = table.Column<string>(type: "nchar", maxLength: 6, nullable: false),
+                    DoctorId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OfficeLocations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_OfficeLocations_OfficeLocationId",
-                        column: x => x.OfficeLocationId,
-                        principalTable: "OfficeLocations",
+                        name: "FK_OfficeLocations_Users_DoctorId",
+                        column: x => x.DoctorId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -188,6 +188,11 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 column: "PrescriptionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OfficeLocations_DoctorId",
+                table: "OfficeLocations",
+                column: "DoctorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Prescriptions_DoctorId",
                 table: "Prescriptions",
                 column: "DoctorId");
@@ -213,12 +218,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 column: "DoctorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_OfficeLocationId",
-                table: "Users",
-                column: "OfficeLocationId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Visits_DoctorId",
                 table: "Visits",
                 column: "DoctorId");
@@ -235,6 +234,9 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 name: "Medicines");
 
             migrationBuilder.DropTable(
+                name: "OfficeLocations");
+
+            migrationBuilder.DropTable(
                 name: "Reviews");
 
             migrationBuilder.DropTable(
@@ -248,9 +250,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropTable(
-                name: "OfficeLocations");
         }
     }
 }
