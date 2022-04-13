@@ -24,6 +24,6 @@ public class PasswordValidator : AbstractValidator<string>
 
         RuleFor(password => password)
             .Matches(@"[a-z]+")
-            .WithMessage("Must contain at least one uppercase character");
+            .WithMessage("Must contain at least one lowercase character");
     }
 }

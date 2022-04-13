@@ -18,7 +18,7 @@ public class OfficeLocationConfiguration : IEntityTypeConfiguration<OfficeLocati
             .HasMaxLength(40)
             .IsRequired();
         builder.Property(ol => ol.PostalCode)
-            .HasColumnType("nchar")
+            .HasColumnType("char")
             .HasMaxLength(6)
             .IsRequired();
     }

@@ -15,5 +15,5 @@ public interface IApplicationDbContext
     public DbSet<User> Users { get;}
     public DbSet<Visit> Visits { get; }
     
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = new());
 }

@@ -22,8 +22,8 @@ public class Doctor : User
         };
     }
 
-    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber,
-        string description)
+    public void UpdatePersonalInformation(string firstName, string lastName, string telephoneNumber,
+        string description, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
         Description = description;

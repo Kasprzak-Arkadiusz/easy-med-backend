@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 using Api.Extensions;
 using Api.Middlewares;
 using EasyMed.Application;
-using EasyMed.Application.Common.Interfaces;
 using EasyMed.Infrastructure;
 using EasyMed.Infrastructure.Persistence;
+using EasyMed.Infrastructure.Persistence.Utils;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +67,7 @@ builder.Services
 builder.Services.AddSwaggerDocumentation();
 
 WebApplication app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -76,6 +77,13 @@ app.UseCors("FrontendPolicy");
 
 app.UseAuthorization();
 app.MapControllers();
+
+if (app.Environment.IsDevelopment())
+{
+    using var scope = app.Services.CreateScope();
+    var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DatabaseSeeder.Seed(dataContext);
+}
 
 var port = Environment.GetEnvironmentVariable("PORT");
 if (port != null)

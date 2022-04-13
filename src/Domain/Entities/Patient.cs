@@ -12,16 +12,11 @@ public class Patient : User
 
     public static Patient Create(string emailAddress, string password)
     {
-        return new Patient
-        {
-            EmailAddress = emailAddress,
-            PasswordHash =  HashPassword(password),
-            Role = Role.Patient
-        };
+        return new Patient { EmailAddress = emailAddress, PasswordHash = HashPassword(password), Role = Role.Patient };
     }
 
-    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress,
-        string telephoneNumber, string personalIdentityNumber)
+    public void UpdatePersonalInformation(string firstName, string lastName,
+        string telephoneNumber, string personalIdentityNumber, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
         PersonalIdentityNumber = personalIdentityNumber;
