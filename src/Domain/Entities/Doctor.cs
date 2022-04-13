@@ -12,10 +12,12 @@ public class Doctor : User
     public ICollection<Schedule> Schedules { get; private set; }
     public ICollection<Visit> Visits { get; private set; }
 
-    public static Doctor Create(string emailAddress, string password)
+    public static Doctor Create(string firstName, string lastName, string emailAddress, string password)
     {
         return new Doctor
         {
+            FirstName = firstName,
+            LastName = lastName,
             EmailAddress = emailAddress,
             PasswordHash = HashPassword(password),
             Role = Role.Doctor
