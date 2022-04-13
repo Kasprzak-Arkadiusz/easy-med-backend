@@ -10,11 +10,12 @@ public class DoctorViewModel : IMapFrom<Doctor>
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string MedicalSpecialization { get; set; }
-    public string OfficeLocation { get; set; }
+    public string? OfficeLocation { get; set; }
 
     public void Mapping(Profile profile)
     {
         profile.CreateMap<Doctor, DoctorViewModel>()
-            .ForMember(vm => vm.OfficeLocation, opt => opt.MapFrom(d => d.OfficeLocation.GetFullAddress()));
+            .ForMember(vm => vm.OfficeLocation,
+                opt => opt.MapFrom(d => d.OfficeLocation == null ? null : d.OfficeLocation.GetFullAddress()));
     }
 }

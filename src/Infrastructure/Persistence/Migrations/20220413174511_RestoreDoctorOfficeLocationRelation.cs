@@ -16,50 +16,29 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
                 name: "IX_OfficeLocations_DoctorId",
                 table: "OfficeLocations");
 
-            migrationBuilder.DropColumn(
-                name: "DoctorId",
-                table: "OfficeLocations");
-
-            migrationBuilder.AddColumn<int>(
-                name: "OfficeLocationId",
-                table: "Users",
-                type: "integer",
-                nullable: true);
-
             migrationBuilder.CreateIndex(
-                name: "IX_Users_OfficeLocationId",
-                table: "Users",
-                column: "OfficeLocationId",
+                name: "IX_OfficeLocations_DoctorId",
+                table: "OfficeLocations",
+                column: "DoctorId",
                 unique: true);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Users_OfficeLocations_OfficeLocationId",
-                table: "Users",
-                column: "OfficeLocationId",
-                principalTable: "OfficeLocations",
+                name: "FK_OfficeLocations_Users_DoctorId",
+                table: "OfficeLocations",
+                column: "DoctorId",
+                principalTable: "Users",
                 principalColumn: "Id");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Users_OfficeLocations_OfficeLocationId",
-                table: "Users");
+                name: "FK_OfficeLocations_Users_DoctorId",
+                table: "OfficeLocations");
 
             migrationBuilder.DropIndex(
-                name: "IX_Users_OfficeLocationId",
-                table: "Users");
-
-            migrationBuilder.DropColumn(
-                name: "OfficeLocationId",
-                table: "Users");
-
-            migrationBuilder.AddColumn<int>(
-                name: "DoctorId",
-                table: "OfficeLocations",
-                type: "integer",
-                nullable: false,
-                defaultValue: 0);
+                name: "IX_OfficeLocations_DoctorId",
+                table: "OfficeLocations");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OfficeLocations_DoctorId",

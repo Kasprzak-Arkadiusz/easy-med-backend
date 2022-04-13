@@ -21,5 +21,10 @@ public class OfficeLocationConfiguration : IEntityTypeConfiguration<OfficeLocati
             .HasColumnType("char")
             .HasMaxLength(6)
             .IsRequired();
+        
+        builder.HasOne(ol => ol.Doctor)
+            .WithOne(d => d.OfficeLocation)
+            .HasForeignKey<OfficeLocation>(of => of.DoctorId)
+            .IsRequired(false);
     }
 }

@@ -34,6 +34,7 @@ public class GetDoctorByMedicalSpecializationQueryHandler : IRequestHandler<GetD
         CancellationToken cancellationToken)
     {
         var doctorsVm = await _context.Doctors
+            .Include(d => d.OfficeLocation)
             .Where(d => d.MedicalSpecialization == request.MedicalSpecialization.ToString())
             .ProjectTo<DoctorViewModel>(_mapper.ConfigurationProvider)
             .OrderBy(vm => vm.LastName)

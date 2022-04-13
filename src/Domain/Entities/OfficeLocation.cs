@@ -10,6 +10,7 @@ public class OfficeLocation : IEntity
     public string House { get; private set; }
     public string City { get; private set; }
     public string PostalCode { get; private set; }
+    public int DoctorId { get; private set; }
     public Doctor Doctor { get; private set; }
 
     public static OfficeLocation Create(string street, string house, string city, string postalCode, Doctor doctor)
@@ -45,5 +46,4 @@ public class OfficeLocation : IEntity
 
         return builder.ToString();
     }
-    
 }

@@ -1,5 +1,6 @@
 ﻿using EasyMed.Application.Common.Interfaces;
 using EasyMed.Domain.Entities;
+using EasyMed.Domain.Enums;
 using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
 namespace EasyMed.Infrastructure.Persistence.Utils;
@@ -33,8 +34,9 @@ public static class DatabaseSeeder
             Doctor.Create("ElzbietaNowakDr44@wp.pl", "tuSsiS123")
         };
         list[0].UpdatePersonalInformation("Filip", "Wiśniewski", "121212121",
-            "My name is Doctor Adrian. I am licensed health professional " +
+            "My name is Doctor Filip. I am licensed health professional " +
             "who maintain and restore human health through the practice of medicine");
+        list[1].ChangeMedicalSpecialization(MedicalSpecialization.Geriatrician);
         await applicationDbContext.Doctors.AddRangeAsync(list);
         return list;
     }
@@ -51,7 +53,7 @@ public static class DatabaseSeeder
         return patients;
     }
 
-    private static async Task SeedOfficeLocations(IApplicationDbContext context, List<Doctor> doctors)
+    private static async Task SeedOfficeLocations(IApplicationDbContext context, IReadOnlyList<Doctor> doctors)
     {
         var officeLocations = new List<OfficeLocation>
         {
@@ -62,7 +64,7 @@ public static class DatabaseSeeder
         await context.OfficeLocations.AddRangeAsync(officeLocations);
     }
 
-    private static async Task SeedSchedules(IApplicationDbContext context, List<Doctor> doctors)
+    private static async Task SeedSchedules(IApplicationDbContext context, IReadOnlyList<Doctor> doctors)
     {
         var schedules = Enum.GetValues<DayOfWeek>().Where(day => day != DayOfWeek.Sunday)
             .Select(day => Schedule.Create(day, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[2])).ToList();
@@ -85,7 +87,8 @@ public static class DatabaseSeeder
         await context.Schedules.AddRangeAsync(schedules);
     }
 
-    private static async Task SeedVisits(IApplicationDbContext context, List<Doctor> doctors, List<Patient> patients)
+    private static async Task SeedVisits(IApplicationDbContext context, IReadOnlyList<Doctor> doctors,
+        IReadOnlyList<Patient> patients)
     {
         var visits = new List<Visit>
         {
@@ -96,7 +99,8 @@ public static class DatabaseSeeder
         await context.Visits.AddRangeAsync(visits);
     }
 
-    private static async Task SeedReviews(IApplicationDbContext context, List<Doctor> doctors, List<Patient> patients)
+    private static async Task SeedReviews(IApplicationDbContext context, IReadOnlyList<Doctor> doctors,
+        IReadOnlyList<Patient> patients)
     {
         var reviews = new List<Review>
         {
@@ -125,8 +129,8 @@ public static class DatabaseSeeder
         return medicines;
     }
 
-    private static async Task SeedPrescriptions(IApplicationDbContext context, List<Doctor> doctors,
-        List<Patient> patients, List<Medicine> medicines)
+    private static async Task SeedPrescriptions(IApplicationDbContext context, IReadOnlyList<Doctor> doctors,
+        IReadOnlyList<Patient> patients, IReadOnlyList<Medicine> medicines)
     {
         var prescriptions = new List<Prescription>
         {
