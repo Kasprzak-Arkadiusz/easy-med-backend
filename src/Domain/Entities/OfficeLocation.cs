@@ -1,4 +1,5 @@
-﻿using EasyMed.Domain.Common;
+﻿using System.Text;
+using EasyMed.Domain.Common;
 
 namespace EasyMed.Domain.Entities;
 
@@ -30,4 +31,19 @@ public class OfficeLocation : IEntity
         City = city;
         PostalCode = postalCode;
     }
+
+    public string GetFullAddress()
+    {
+        var builder = new StringBuilder(120);
+        builder.Append(Street);
+        builder.Append(' ');
+        builder.Append(House);
+        builder.Append(' ');
+        builder.Append(PostalCode);
+        builder.Append(' ');
+        builder.Append(City);
+
+        return builder.ToString();
+    }
+    
 }

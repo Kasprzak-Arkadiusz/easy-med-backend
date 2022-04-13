@@ -1,4 +1,3 @@
-using System.Security.Authentication;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Utils.SecurityTokens;

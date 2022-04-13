@@ -1,6 +1,5 @@
 using EasyMed.Application.Common.Mappings;
 using EasyMed.Domain.Entities;
-using EasyMed.Domain.Enums;
 
 namespace EasyMed.Application.ViewModels;
 
