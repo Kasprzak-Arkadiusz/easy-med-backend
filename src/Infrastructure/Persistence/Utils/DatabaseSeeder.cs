@@ -36,6 +36,8 @@ public static class DatabaseSeeder
         list[0].UpdatePersonalInformation("Filip", "Wiśniewski", "121212121",
             "My name is Doctor Filip. I am licensed health professional " +
             "who maintain and restore human health through the practice of medicine");
+        list[1].UpdatePersonalInformation("Konrad", "Zabrzecki", "637482911","");
+        list[2].UpdatePersonalInformation("Elżbieta", "Nowak", "648123392","");
         list[1].ChangeMedicalSpecialization(MedicalSpecialization.Geriatrician);
         await applicationDbContext.Doctors.AddRangeAsync(list);
         return list;

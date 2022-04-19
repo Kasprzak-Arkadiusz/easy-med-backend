@@ -1,4 +1,4 @@
-﻿using EasyMed.Application.Queries.GetDoctors;
+﻿using EasyMed.Application.Queries.Doctors;
 using EasyMed.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +15,11 @@ public class DoctorController : BaseController
     /// <returns>Doctors with requested specialization</returns>
     /// <response code="200">Successfully returned doctors</response>
     /// <response code="400">Validation or logic error (e.g. MedicalSpecialization does not exist)</response>
-    [HttpGet("specialization")]
+    [HttpGet("withSpecialization")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetByMedicalSpecialization(MedicalSpecialization specialization)
+    public async Task<ActionResult<IEnumerable<DoctorViewModel>>> GetByMedicalSpecialization(
+        MedicalSpecialization specialization)
     {
         try
         {
@@ -42,7 +43,8 @@ public class DoctorController : BaseController
     [HttpGet("freeTerms")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetDoctorFreeTerm(int doctorId, DateTime visitDateTime)
+    public async Task<ActionResult<IEnumerable<FreeTermViewModel>>> GetDoctorFreeTerm(int doctorId,
+        DateTime visitDateTime)
     {
         try
         {
@@ -53,5 +55,18 @@ public class DoctorController : BaseController
         {
             return BadRequest(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Get medial specializations
+    /// </summary>
+    /// <returns>Medical specializations</returns>
+    /// <response code="200">Successfully returned medical specializations</response>
+    [HttpGet("specializations")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<MedicalSpecialization>>> GetMedicalSpecializations()
+    {
+        var medicalSpecializations = await Mediator.Send(new GetMedicalSpecializationsQuery());
+        return Ok(medicalSpecializations);
     }
 }

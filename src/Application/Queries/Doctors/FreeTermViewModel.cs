@@ -1,6 +1,6 @@
 ﻿using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
-namespace EasyMed.Application.Queries.GetDoctors;
+namespace EasyMed.Application.Queries.Doctors;
 
 public class FreeTermViewModel
 {

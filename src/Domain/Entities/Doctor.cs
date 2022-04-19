@@ -30,6 +30,8 @@ public class Doctor : User
         MedicalSpecialization = specialization.ToString();
     }
 
+    public override string GetFullName() => $"dr. {FirstName} {LastName}";
+
     public void ChangeOfficeLocation(OfficeLocation officeLocation)
     {
         OfficeLocation = officeLocation;

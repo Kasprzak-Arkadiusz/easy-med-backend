@@ -5,7 +5,7 @@ using EasyMed.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace EasyMed.Application.Queries.GetDoctors;
+namespace EasyMed.Application.Queries.Doctors;
 
 public class GetDoctorsByMedicalSpecializationQuery : IRequest<IEnumerable<DoctorViewModel>>
 {

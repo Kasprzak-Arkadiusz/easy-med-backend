@@ -1,5 +1,5 @@
 ﻿using EasyMed.Application.Common.Interfaces;
-using EasyMed.Application.Queries.GetDoctors;
+using EasyMed.Application.Queries.Doctors;
 using EasyMed.Domain.Entities;
 using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 

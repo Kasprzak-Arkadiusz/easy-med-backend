@@ -3,7 +3,7 @@ using EasyMed.Application.Common.Interfaces;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace EasyMed.Application.Queries.GetDoctors;
+namespace EasyMed.Application.Queries.Doctors;
 
 public class GetFreeTermsByDoctorIdQuery : IRequest<IEnumerable<FreeTermViewModel>>
 {
@@ -33,7 +33,7 @@ public class GetFreeTermsByDoctorIdQueryHandler : IRequestHandler<GetFreeTermsBy
         CancellationToken cancellationToken)
     {
         if (!_context.Doctors.Any(d => d.Id == request.DoctorId))
-            throw new NotFoundException("Doctor not found");
+            throw new BadRequestException("Doctor not found");
 
         if (request.VisitDate <= DateTime.Now)
             throw new BadRequestException("You can make an appointment the day before the visit at the latest");

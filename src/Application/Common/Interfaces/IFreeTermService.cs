@@ -1,4 +1,4 @@
-﻿using EasyMed.Application.Queries.GetDoctors;
+﻿using EasyMed.Application.Queries.Doctors;
 using EasyMed.Domain.Entities;
 
 namespace EasyMed.Application.Common.Interfaces;

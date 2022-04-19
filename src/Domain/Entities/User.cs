@@ -21,4 +21,6 @@ public abstract class User : IEntity
         EmailAddress = emailAddress ?? EmailAddress;
         TelephoneNumber = telephoneNumber;
     }
+
+    public virtual string GetFullName() => $"{FirstName} {LastName}";
 }
