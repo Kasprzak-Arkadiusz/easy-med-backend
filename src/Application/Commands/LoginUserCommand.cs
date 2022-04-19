@@ -2,6 +2,7 @@ using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Utils.SecurityTokens;
 using EasyMed.Application.ViewModels;
+using EasyMed.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static BCrypt.Net.BCrypt;
@@ -12,11 +13,13 @@ public class LoginUserCommand : IRequest<AuthViewModel>
 {
     public string EmailAddress { get; }
     public string Password { get; }
+    public Role LoginAs { get; }
 
-    public LoginUserCommand(string emailAddress, string password)
+    public LoginUserCommand(string emailAddress, string password, Role loginAs)
     {
         EmailAddress = emailAddress;
         Password = password;
+        LoginAs = loginAs;
     }
 }
 
@@ -47,6 +50,11 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthVie
             throw new UnauthorizedException("Invalid credentials");
         }
 
+        if (command.LoginAs != user.Role)
+        {
+            throw new ForbiddenAccessException($"You are not authorized to login as {command.LoginAs.ToString()}");
+        }
+        
         var accessToken = _securityTokenService.GenerateAccessTokenForUser(user.Id, user.EmailAddress, user.Role);
 
         return new AuthViewModel

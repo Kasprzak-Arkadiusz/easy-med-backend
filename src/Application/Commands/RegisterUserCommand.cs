@@ -6,18 +6,23 @@ using EasyMed.Domain.Entities;
 using EasyMed.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+
 #pragma warning disable CA2208
 
 namespace EasyMed.Application.Commands;
 
 public class RegisterUserCommand : IRequest<UserViewModel>
 {
+    public string FirstName { get; }
+    public string LastName { get; }
     public string EmailAddress { get; }
     public string Password { get; }
     public Role RegisterAs { get; }
 
-    public RegisterUserCommand(string emailAddress, string password, Role registerAs)
+    public RegisterUserCommand(string firstName, string lastName, string emailAddress, string password, Role registerAs)
     {
+        FirstName = firstName;
+        LastName = lastName;
         EmailAddress = emailAddress;
         Password = password;
         RegisterAs = registerAs;
@@ -47,14 +52,14 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
 
         User user = command.RegisterAs switch
         {
-            Role.Doctor => Doctor.Create(command.EmailAddress, command.Password),
-            Role.Patient => Patient.Create(command.EmailAddress, command.Password),
+            Role.Doctor => Doctor.Create(command.FirstName, command.LastName, command.EmailAddress, command.Password),
+            Role.Patient => Patient.Create(command.FirstName, command.LastName, command.EmailAddress, command.Password),
             _ => throw new ArgumentOutOfRangeException()
         };
 
         await _applicationDbContext.Users.AddAsync(user, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
-        
+
         return _mapper.Map<UserViewModel>(user);
     }
 }

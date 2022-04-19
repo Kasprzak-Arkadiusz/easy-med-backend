@@ -10,9 +10,16 @@ public class Patient : User
     public ICollection<Prescription> Prescriptions { get; private set; }
     public ICollection<Visit> Visits { get; private set; }
 
-    public static Patient Create(string emailAddress, string password)
+    public static Patient Create(string firstName, string lastName, string emailAddress, string password)
     {
-        return new Patient { EmailAddress = emailAddress, PasswordHash = HashPassword(password), Role = Role.Patient };
+        return new Patient
+        {
+            FirstName = firstName,
+            LastName = lastName,
+            EmailAddress = emailAddress,
+            PasswordHash =  HashPassword(password),
+            Role = Role.Patient
+        };
     }
 
     public void UpdatePersonalInformation(string firstName, string lastName,

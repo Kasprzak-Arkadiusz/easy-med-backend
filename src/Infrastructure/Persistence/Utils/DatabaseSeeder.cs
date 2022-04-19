@@ -29,9 +29,9 @@ public static class DatabaseSeeder
     {
         var list = new List<Doctor>
         {
-            Doctor.Create("bestDoctor@gmail.com", "rhinitiS72"),
-            Doctor.Create("drKonradZabrzecki123@onet.pl", "12Influenza"),
-            Doctor.Create("ElzbietaNowakDr44@wp.pl", "tuSsiS123")
+            Doctor.Create("Filip", "Wiśniewski","bestDoctor@gmail.com", "rhinitiS72"),
+            Doctor.Create("Konrad", "Zabrzecki","drKonradZabrzecki123@onet.pl", "12Influenza"),
+            Doctor.Create("Elżbieta", "Nowak","ElzbietaNowakDr44@wp.pl", "tuSsiS123")
         };
         list[0].UpdatePersonalInformation("Filip", "Wiśniewski", "121212121",
             "My name is Doctor Filip. I am licensed health professional " +
@@ -47,8 +47,8 @@ public static class DatabaseSeeder
     {
         var patients = new List<Patient>
         {
-            Patient.Create("MichalNowakowski6428@gmail.com", "Michal6428"),
-            Patient.Create("JohnDoe@gmail.com", "DoeJohn13")
+            Patient.Create("Michał", "Nowakowski","MichalNowakowski6428@gmail.com", "Michal6428"),
+            Patient.Create("Janek", "Kowalski","JohnDoe@gmail.com", "DoeJohn13")
         };
         patients[0].UpdatePersonalInformation("Michał", "Nowakowski", "664664664", "00081205417");
         await context.Patients.AddRangeAsync(patients);
