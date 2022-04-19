@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Domain.Enums;
 using MediatR;

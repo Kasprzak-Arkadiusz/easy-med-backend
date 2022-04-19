@@ -94,7 +94,7 @@ public static class DatabaseSeeder
         {
             Visit.Create(new DateTime(2022, 04, 27, 12, 30, 0), doctors[2], patients[0]),
             Visit.Create(new DateTime(2022, 05, 04, 15, 30, 0), doctors[2], patients[0]),
-            Visit.Create(new DateTime(2022, 04, 25, 18, 45, 0), doctors[1], patients[0]),
+            Visit.Create(new DateTime(2022, 04, 25, 16, 00, 0), doctors[1], patients[0]),
         };
         await context.Visits.AddRangeAsync(visits);
     }

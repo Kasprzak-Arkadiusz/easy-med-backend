@@ -1,4 +1,6 @@
 ﻿using System.Reflection;
+using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Services;
 using EasyMed.Application.Utils.SecurityTokens;
 using EasyMed.Domain.Entities;
 using FluentValidation;
@@ -18,6 +20,7 @@ public static class DependencyInjection
         services.AddMediatR(Assembly.GetExecutingAssembly());
 
         services.AddScoped<ISecurityTokenService, SecurityTokenService>();
+        services.AddScoped<IFreeTermService, FreeTermService>();
         
         return services;
     }

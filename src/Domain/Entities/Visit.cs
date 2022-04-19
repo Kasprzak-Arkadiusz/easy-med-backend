@@ -4,6 +4,7 @@ namespace EasyMed.Domain.Entities;
 
 public class Visit : IEntity
 {
+    private const int VisitTimeInMinutes = 30;
     public int Id { get; private set; }
     public DateTime DateTime { get; private set; }
     public bool IsCompleted { get; private set; }
@@ -14,17 +15,13 @@ public class Visit : IEntity
 
     public static Visit Create(DateTime dateTime, Doctor doctor, Patient patient)
     {
-        return new Visit
-        {
-            DateTime = dateTime, 
-            IsCompleted = false, 
-            Doctor = doctor, 
-            Patient = patient
-        };
+        return new Visit { DateTime = dateTime, IsCompleted = false, Doctor = doctor, Patient = patient };
     }
 
     public void Complete()
     {
         IsCompleted = true;
     }
+
+    public static int GetVisitTimeInMinutes() => VisitTimeInMinutes;
 }
