@@ -6,7 +6,6 @@ using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
 namespace EasyMed.Application.Services;
 
-
 public class FreeTermService : IFreeTermService
 {
     public IEnumerable<FreeTermViewModel> CalculateFreeTerms(DateTime visitDate, Schedule? schedule,
