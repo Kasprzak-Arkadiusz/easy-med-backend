@@ -1,5 +1,6 @@
 ﻿using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Queries.Doctors;
+using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Entities;
 using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
@@ -12,8 +13,10 @@ public class FreeTermService : IFreeTermService
     {
         var freeTerms = new List<FreeTermViewModel>();
         if (schedule is null)
+        {
             return freeTerms;
-
+        }
+        
         var visitTimeInMinutes = Visit.GetVisitTimeInMinutes();
         var endTime = schedule.EndTime.AddMinutes(-visitTimeInMinutes);
         var visitList = visits.ToList();

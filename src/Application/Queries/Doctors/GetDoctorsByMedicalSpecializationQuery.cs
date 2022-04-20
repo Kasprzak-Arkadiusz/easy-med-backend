@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

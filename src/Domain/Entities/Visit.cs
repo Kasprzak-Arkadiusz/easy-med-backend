@@ -17,8 +17,10 @@ public class Visit : IEntity
     public static Visit Create(DateTime dateTime, Doctor doctor, Patient patient)
     {
         if (doctor.OfficeLocation is null)
+        {
             throw new VisitWithoutLocationException("Cannot create a visit without doctor office location");
-        
+        }
+
         return new Visit { DateTime = dateTime, IsCompleted = false, Doctor = doctor, Patient = patient };
     }
 

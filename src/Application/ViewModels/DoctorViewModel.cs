@@ -2,7 +2,7 @@
 using EasyMed.Application.Common.Mappings;
 using EasyMed.Domain.Entities;
 
-namespace EasyMed.Application.Queries.Doctors;
+namespace EasyMed.Application.ViewModels;
 
 public class DoctorViewModel : IMapFrom<Doctor>
 {

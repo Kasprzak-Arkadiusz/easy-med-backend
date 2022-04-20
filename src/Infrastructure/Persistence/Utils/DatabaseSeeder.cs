@@ -10,7 +10,9 @@ public static class DatabaseSeeder
     public async static Task Seed(IApplicationDbContext context)
     {
         if (context.Users.Any())
+        {
             return;
+        }
 
         List<Doctor> doctors = await SeedDoctors(context);
         List<Patient> patients = await SeedPatients(context);
@@ -61,7 +63,7 @@ public static class DatabaseSeeder
         {
             OfficeLocation.Create("ul. Generała Bema", "15", "Białystok", "15-458", doctors[0]),
             OfficeLocation.Create("al. Jerozolimskie", "34", "Warszawa", "05-800", doctors[1]),
-            OfficeLocation.Create("ul. Marii Skłodowskiej-Curie", "24A", "Białystok", "15-276", doctors[2]),
+            OfficeLocation.Create("ul. Marii Skłodowskiej-Curie", "24A", "Białystok", "15-276", doctors[2])
         };
         await context.OfficeLocations.AddRangeAsync(officeLocations);
     }
@@ -77,14 +79,14 @@ public static class DatabaseSeeder
             Schedule.Create(DayOfWeek.Tuesday, new TimeOnly(12, 0, 0), new TimeOnly(18, 0, 0), doctors[1]),
             Schedule.Create(DayOfWeek.Thursday, new TimeOnly(12, 0, 0), new TimeOnly(18, 0, 0), doctors[1]),
             Schedule.Create(DayOfWeek.Saturday, new TimeOnly(14, 0, 0), new TimeOnly(20, 0, 0), doctors[1]),
-            Schedule.Create(DayOfWeek.Sunday, new TimeOnly(9, 30, 0), new TimeOnly(16, 0, 0), doctors[1]),
+            Schedule.Create(DayOfWeek.Sunday, new TimeOnly(9, 30, 0), new TimeOnly(16, 0, 0), doctors[1])
         });
 
         schedules.AddRange(new[]
         {
             Schedule.Create(DayOfWeek.Tuesday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0]),
             Schedule.Create(DayOfWeek.Wednesday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0]),
-            Schedule.Create(DayOfWeek.Thursday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0]),
+            Schedule.Create(DayOfWeek.Thursday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0])
         });
         await context.Schedules.AddRangeAsync(schedules);
     }
@@ -96,7 +98,7 @@ public static class DatabaseSeeder
         {
             Visit.Create(new DateTime(2022, 04, 27, 12, 30, 0), doctors[2], patients[0]),
             Visit.Create(new DateTime(2022, 05, 04, 15, 30, 0), doctors[2], patients[0]),
-            Visit.Create(new DateTime(2022, 04, 25, 16, 00, 0), doctors[1], patients[0]),
+            Visit.Create(new DateTime(2022, 04, 25, 16, 00, 0), doctors[1], patients[0])
         };
         await context.Visits.AddRangeAsync(visits);
     }
@@ -125,7 +127,7 @@ public static class DatabaseSeeder
         {
             Medicine.Create("Dymista aer.do nosa, zaw.", "(0,137mg+0,005mg)/daw."),
             Medicine.Create("Neozine Max tab.do ustne", "(0,25mg)/daw."),
-            Medicine.Create("Cogiton ", "1 tabletka dziennie"),
+            Medicine.Create("Cogiton ", "1 tabletka dziennie")
         };
         await context.Medicines.AddRangeAsync(medicines);
         return medicines;

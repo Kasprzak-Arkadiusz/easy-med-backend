@@ -28,8 +28,10 @@ public class CancelVisitCommandHandler : IRequestHandler<CancelVisitCommand, Uni
     {
         var visit = await _context.Visits.FirstOrDefaultAsync(v => v.Id == request.Id, cancellationToken);
         if (visit == default)
+        {
             throw new BadRequestException("Visit with given id does not exist");
-
+        }
+        
         _context.Visits.Remove(visit);
         await _context.SaveChangesAsync(cancellationToken);
         

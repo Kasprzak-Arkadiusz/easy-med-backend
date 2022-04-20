@@ -1,4 +1,5 @@
 ﻿using EasyMed.Application.Queries.Doctors;
+using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ public class DoctorController : BaseController
     /// <returns>Doctors with requested specialization</returns>
     /// <response code="200">Successfully returned doctors</response>
     /// <response code="400">Validation or logic error (e.g. MedicalSpecialization does not exist)</response>
-    [HttpGet("withSpecialization")]
+    [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<DoctorViewModel>>> GetByMedicalSpecialization(
@@ -58,7 +59,7 @@ public class DoctorController : BaseController
     }
 
     /// <summary>
-    /// Get medial specializations
+    /// Get medical specializations
     /// </summary>
     /// <returns>Medical specializations</returns>
     /// <response code="200">Successfully returned medical specializations</response>

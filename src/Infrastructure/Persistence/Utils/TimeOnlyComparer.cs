@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 
+namespace EasyMed.Infrastructure.Persistence.Utils;
+
 public class TimeOnlyComparer : ValueComparer<TimeOnly>
 {
     public TimeOnlyComparer() : base(
