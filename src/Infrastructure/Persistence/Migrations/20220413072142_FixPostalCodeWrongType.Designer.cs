@@ -3,6 +3,7 @@ using System;
 using EasyMed.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EasyMed.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220413072142_FixPostalCodeWrongType")]
+    partial class FixPostalCodeWrongType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,8 +85,7 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DoctorId")
-                        .IsUnique();
+                    b.HasIndex("DoctorId");
 
                     b.ToTable("OfficeLocations");
                 });
@@ -291,8 +292,10 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("EasyMed.Domain.Entities.OfficeLocation", b =>
                 {
                     b.HasOne("EasyMed.Domain.Entities.Doctor", "Doctor")
-                        .WithOne("OfficeLocation")
-                        .HasForeignKey("EasyMed.Domain.Entities.OfficeLocation", "DoctorId");
+                        .WithMany()
+                        .HasForeignKey("DoctorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
                 });
@@ -372,8 +375,6 @@ namespace EasyMed.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("EasyMed.Domain.Entities.Doctor", b =>
                 {
-                    b.Navigation("OfficeLocation");
-
                     b.Navigation("Prescriptions");
 
                     b.Navigation("Reviews");

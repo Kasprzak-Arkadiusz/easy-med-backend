@@ -18,7 +18,7 @@ public class InfrastructureSettings
         set => _dbConnectionString = value;
     }
 
-    private string ParseDatabaseUrl(string databaseUrl)
+    private static string ParseDatabaseUrl(string databaseUrl)
     {
         var databaseUri = new Uri(databaseUrl);
         var userInfo = databaseUri.UserInfo.Split(':');
@@ -32,7 +32,7 @@ public class InfrastructureSettings
             Database = databaseUri.LocalPath.TrimStart('/'),
             Pooling = true,
             SslMode = SslMode.Require,
-            TrustServerCertificate = true,
+            TrustServerCertificate = true
         };
 
         return builder.ToString();

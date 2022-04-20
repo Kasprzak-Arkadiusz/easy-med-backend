@@ -7,6 +7,7 @@ public class Doctor : User
 {
     public string Description { get; private set; }
     public string MedicalSpecialization { get; private set; }
+    public OfficeLocation? OfficeLocation { get; private set; }
     public ICollection<Prescription> Prescriptions { get; private set; }
     public ICollection<Review> Reviews { get; private set; }
     public ICollection<Schedule> Schedules { get; private set; }
@@ -24,15 +25,22 @@ public class Doctor : User
         };
     }
 
-    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress, string telephoneNumber,
-        string description)
+    public void UpdatePersonalInformation(string firstName, string lastName, string telephoneNumber,
+        string description, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
         Description = description;
     }
-    
+
     public void ChangeMedicalSpecialization(MedicalSpecialization specialization)
     {
         MedicalSpecialization = specialization.ToString();
+    }
+
+    public override string GetFullName() => $"dr. {FirstName} {LastName}";
+
+    public void ChangeOfficeLocation(OfficeLocation officeLocation)
+    {
+        OfficeLocation = officeLocation;
     }
 }

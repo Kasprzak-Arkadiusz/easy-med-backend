@@ -22,8 +22,8 @@ public class Patient : User
         };
     }
 
-    public void UpdatePersonalInformation(string firstName, string lastName, string emailAddress,
-        string telephoneNumber, string personalIdentityNumber)
+    public void UpdatePersonalInformation(string firstName, string lastName,
+        string telephoneNumber, string personalIdentityNumber, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
         PersonalIdentityNumber = personalIdentityNumber;

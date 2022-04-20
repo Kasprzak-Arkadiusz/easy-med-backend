@@ -13,12 +13,14 @@ public abstract class User : IEntity
     public string? LastName { get; protected set; }
     public string? TelephoneNumber { get; protected set; }
 
-    protected void UpdatePersonalInformation(string firstName, string lastName, string emailAddress,
+    protected void UpdatePersonalInformation(string firstName, string lastName, string? emailAddress,
         string telephoneNumber)
     {
         FirstName = firstName;
         LastName = lastName;
-        EmailAddress = emailAddress;
+        EmailAddress = emailAddress ?? EmailAddress;
         TelephoneNumber = telephoneNumber;
     }
+
+    public virtual string GetFullName() => $"{FirstName} {LastName}";
 }

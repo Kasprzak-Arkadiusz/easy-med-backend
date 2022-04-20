@@ -10,7 +10,7 @@ public class Schedule : IEntity
     public TimeOnly EndTime { get; private set; }
     public Doctor Doctor { get; private set; }
 
-    public static Schedule Create(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime, Doctor doctor)
+    public static Schedule Create(Enums.DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime, Doctor doctor)
     {
         return new Schedule
         {
@@ -21,7 +21,7 @@ public class Schedule : IEntity
         };
     }
 
-    public void ChangeSchedule(DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime)
+    public void ChangeSchedule(Enums.DayOfWeek dayOfWeek, TimeOnly startTime, TimeOnly endTime)
     {
         DayOfWeek = dayOfWeek.ToString();
         StartTime = startTime;

@@ -17,7 +17,6 @@ public static class DependencyInjection
         {
             options.UseNpgsql(settings.DbConnectionString);
         });
-
         services.AddTransient<IDateTime, DateTimeService>();
 
         return services;
