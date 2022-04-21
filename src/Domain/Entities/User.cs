@@ -16,10 +16,26 @@ public abstract class User : IEntity
     protected void UpdatePersonalInformation(string firstName, string lastName, string? emailAddress,
         string telephoneNumber)
     {
-        FirstName = firstName;
-        LastName = lastName;
-        EmailAddress = emailAddress ?? EmailAddress;
-        TelephoneNumber = telephoneNumber;
+        if (!string.IsNullOrEmpty(firstName) && FirstName != firstName)
+        {
+            FirstName = firstName;
+        }
+        
+        if (!string.IsNullOrEmpty(lastName) && LastName != lastName)
+        {
+            LastName = lastName;
+        }
+        
+        if (!string.IsNullOrEmpty(emailAddress) && EmailAddress != emailAddress)
+        {
+            EmailAddress = emailAddress;
+        }
+
+        if (!string.IsNullOrEmpty(telephoneNumber) && TelephoneNumber != telephoneNumber)
+        {
+            TelephoneNumber = telephoneNumber;
+        }
+
     }
 
     public virtual string GetFullName() => $"{FirstName} {LastName}";

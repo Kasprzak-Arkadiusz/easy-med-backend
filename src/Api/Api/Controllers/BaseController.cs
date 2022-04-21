@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+
 // ReSharper disable ConstantNullCoalescingCondition
 #pragma warning disable CS8603
 #pragma warning disable CS8601
