@@ -78,20 +78,15 @@ public class DoctorController : BaseController
     /// </summary>
     /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully returned medical specializations</response>
-    /// <response code="204">Not found doctor with given id</response>
+    /// <response code="400">Validation or logic error</response>
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
     {
-        var found = await Mediator.Send(new UpdateDoctorInformationCommand(id, dto.FirstName, dto.LastName, dto.Email,
+        await Mediator.Send(new UpdateDoctorInformationCommand(id, dto.FirstName, dto.LastName, dto.Email,
             dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
-        if (found)
-        {
-            return Ok();
-        }
-
-        return NoContent();
+        return Ok();
     }
 }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Commands;
 
-public class UpdateDoctorInformationCommand : IRequest<bool>
+public class UpdateDoctorInformationCommand : IRequest<Unit>
 {
     public int Id { get; }
     public string FirstName { get; }
@@ -32,7 +32,7 @@ public class UpdateDoctorInformationCommand : IRequest<bool>
     }
 }
 
-public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, bool>
+public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, Unit>
 {
     private readonly IApplicationDbContext _context;
 
@@ -41,14 +41,14 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
         _context = context;
     }
 
-    public async Task<bool> Handle(UpdateDoctorInformationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateDoctorInformationCommand request, CancellationToken cancellationToken)
     {
         var doctor = await _context.Doctors
             .Include(d => d.OfficeLocation)
             .FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
         if (doctor == default)
         {
-            return false;
+            throw new BadRequestException("Doctor with given id does not exist");
         }
 
         doctor.UpdatePersonalInformation(request.FirstName, request.LastName, request.Telephone, request.Description,
@@ -69,6 +69,6 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return true;
+        return Unit.Value;
     }
 }
