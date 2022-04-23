@@ -13,13 +13,13 @@ public class LoginUserCommand : IRequest<AuthViewModel>
 {
     public string EmailAddress { get; }
     public string Password { get; }
-    public Role LoginAs { get; }
+    public Role Role { get; }
 
-    public LoginUserCommand(string emailAddress, string password, Role loginAs)
+    public LoginUserCommand(string emailAddress, string password, Role role)
     {
         EmailAddress = emailAddress;
         Password = password;
-        LoginAs = loginAs;
+        Role = role;
     }
 }
 
@@ -50,9 +50,9 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthVie
             throw new UnauthorizedException("Invalid credentials");
         }
 
-        if (command.LoginAs != user.Role)
+        if (command.Role != user.Role)
         {
-            throw new ForbiddenAccessException($"You are not authorized to login as {command.LoginAs.ToString()}");
+            throw new ForbiddenAccessException($"You are not authorized to login as {command.Role.ToString()}");
         }
         
         var accessToken = _securityTokenService.GenerateAccessTokenForUser(user.Id, user.EmailAddress, user.Role);
@@ -61,7 +61,9 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthVie
         {
             AccessToken = accessToken,
             Role = user.Role.ToString(),
-            EmailAddress = user.EmailAddress
+            EmailAddress = user.EmailAddress,
+            FirstName = user.FirstName!,
+            LastName = user.LastName!
         };
     }
 }

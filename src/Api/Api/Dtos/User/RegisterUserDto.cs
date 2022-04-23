@@ -15,7 +15,7 @@ public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
         RuleFor(dto => dto.RepeatPassword).SetValidator(new PasswordValidator())
             .Equal(dto => dto.Password)
             .WithMessage("Password and repeat password does not match");
-        RuleFor(dto => dto.RegisterAs).IsInEnum();
+        RuleFor(dto => dto.Role).IsInEnum();
     }
 }
 
@@ -26,15 +26,15 @@ public class RegisterUserDto
     public string EmailAddress { get; }
     public string Password { get; }
     public string RepeatPassword { get; }
-    public Role RegisterAs { get; }
+    public Role Role { get; }
 
-    public RegisterUserDto(string firstName, string lastName, string emailAddress, string password, string repeatPassword, Role registerAs)
+    public RegisterUserDto(string firstName, string lastName, string emailAddress, string password, string repeatPassword, Role role)
     {
         FirstName = firstName;
         LastName = lastName;
         EmailAddress = emailAddress;
         Password = password;
         RepeatPassword = repeatPassword;
-        RegisterAs = registerAs;
+        Role = role;
     }
 }

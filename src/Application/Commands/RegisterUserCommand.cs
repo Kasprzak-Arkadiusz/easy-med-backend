@@ -17,15 +17,15 @@ public class RegisterUserCommand : IRequest<UserViewModel>
     public string LastName { get; }
     public string EmailAddress { get; }
     public string Password { get; }
-    public Role RegisterAs { get; }
+    public Role Role { get; }
 
-    public RegisterUserCommand(string firstName, string lastName, string emailAddress, string password, Role registerAs)
+    public RegisterUserCommand(string firstName, string lastName, string emailAddress, string password, Role role)
     {
         FirstName = firstName;
         LastName = lastName;
         EmailAddress = emailAddress;
         Password = password;
-        RegisterAs = registerAs;
+        Role = role;
     }
 }
 
@@ -50,7 +50,7 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
             throw new BadRequestException("User with given email address already exists");
         }
 
-        User user = command.RegisterAs switch
+        User user = command.Role switch
         {
             Role.Doctor => Doctor.Create(command.FirstName, command.LastName, command.EmailAddress, command.Password),
             Role.Patient => Patient.Create(command.FirstName, command.LastName, command.EmailAddress, command.Password),
