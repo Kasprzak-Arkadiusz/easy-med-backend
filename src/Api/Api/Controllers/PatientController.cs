@@ -1,4 +1,5 @@
 ﻿using EasyMed.Application.Queries.Patients;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
@@ -12,6 +13,7 @@ public class PatientController : BaseController
     /// <response code="200">Successfully returned reviews</response>
     /// <response code="400">Validation or logic error</response>
     /// <response code="404">Patient not found</response>
+    [Authorize]
     [HttpGet("{id:int}/reviews")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

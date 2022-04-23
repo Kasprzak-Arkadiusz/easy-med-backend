@@ -14,8 +14,8 @@ public class UserController : BaseController
     /// <returns>A newly created User</returns>
     /// <response code="201">User successfully registered</response>
     /// <response code="400">Validation or logic error</response>
-    [HttpPost("register")]
     [AllowAnonymous]
+    [HttpPost("register")]
     [ProducesResponseType(typeof(UserViewModel), 201)]
     [ProducesResponseType(400)]
     public async Task<ActionResult> Register([FromBody] RegisterUserDto dto)
@@ -32,7 +32,11 @@ public class UserController : BaseController
     /// <response code="200">User successfully logged in</response>
     /// <response code="400">Validation or logic error</response>
     /// <response code="401">Invalid credentials</response>
+    [AllowAnonymous]
     [HttpPost("login")]
+    [ProducesResponseType(typeof(UserViewModel), 201)]
+    [ProducesResponseType(typeof(UserViewModel), 400)]
+    [ProducesResponseType(typeof(UserViewModel), 401)]
     public async Task<ActionResult<AuthViewModel>> Login([FromBody] LoginUserDto dto)
     {
         var auth = await Mediator.Send(new LoginUserCommand(dto.EmailAddress, dto.Password, dto.LoginAs));

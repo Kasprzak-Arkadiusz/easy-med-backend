@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using EasyMed.Application.Common.Exceptions;
+using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,4 +17,15 @@ public class BaseController : ControllerBase
 {
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
+    protected int RequireUserId()
+    {
+        var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (idClaim == default)
+        {
+            throw new UnauthorizedException("You are not authorized");
+        }
+
+        return int.Parse(idClaim.Value);
+    }
 }
