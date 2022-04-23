@@ -89,4 +89,20 @@ public class DoctorController : BaseController
 
         return Ok();
     }
+    
+    /// <summary>
+    /// Get doctor reviews
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned reviews</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Doctor not found</response>
+    [HttpGet("{id:int}/reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetDoctorReviews(int id)
+    {
+        var reviews = await Mediator.Send(new GetReviewsByDoctorIdQuery(id));
+        return Ok(reviews);
+    }
 }
