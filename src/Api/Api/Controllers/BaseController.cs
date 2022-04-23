@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using EasyMed.Application.Common.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,7 +21,7 @@ public class BaseController : ControllerBase
         var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
         if (idClaim == default)
         {
-            throw new UnauthorizedException("You are not authorized");
+            throw new ("You are not authenticated");
         }
 
         return int.Parse(idClaim.Value);
