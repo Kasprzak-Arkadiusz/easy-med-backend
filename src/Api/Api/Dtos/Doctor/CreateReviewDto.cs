@@ -7,7 +7,7 @@ public class CreateReviewDtoValidator : AbstractValidator<CreateReviewDto>
 {
     public CreateReviewDtoValidator()
     {
-        RuleFor(d => d.Rating).GreaterThanOrEqualTo((short)0);
+        RuleFor(d => d.Rating).GreaterThanOrEqualTo((short)1);
         RuleFor(d => d.Rating).LessThanOrEqualTo((short)5);
         RuleFor(dto => dto.Description).MinimumLength(ValidationConstants.MinDescriptionLength)
             .WithMessage("Description must be less than {MaxLength} characters. {TotalLength} characters entered.");
