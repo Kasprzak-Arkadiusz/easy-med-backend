@@ -3,6 +3,7 @@ using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Entities;
+using EasyMed.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -63,13 +64,19 @@ public class ReserveVisitCommandHandler : IRequestHandler<ReserveVisitCommand, R
             throw new BadRequestException("Visit cannot be reserved. This term is busy");
         }
 
-        var visit = Visit.Create(request.VisitDateTime, doctor, patient);
+        try
+        {
+            Visit visit = Visit.Create(request.VisitDateTime, doctor, patient);
+            await _context.Visits.AddAsync(visit, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
 
-        await _context.Visits.AddAsync(visit, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+            var viewModel = _mapper.Map<ReserveVisitViewModel>(visit);
 
-        var viewModel = _mapper.Map<ReserveVisitViewModel>(visit);
-
-        return viewModel;
+            return viewModel;
+        }
+        catch (VisitWithoutLocationException e)
+        {
+            throw new BadRequestException(e.Message);
+        }
     }
 }

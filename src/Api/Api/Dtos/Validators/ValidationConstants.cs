@@ -6,4 +6,10 @@ public static class ValidationConstants
     public const int MaxPasswordLength = 64;
     public const int MinEmailAddressLength = 3;
     public const int MaxEmailAddressLength = 50;
+    public const int MaxFirstNameLength = 40;
+    public const int MaxLastNameLength = 40;
+    public const int MaxTelephoneNumberLength = 9;
+    public const int MaxDoctorDescriptionLength = 200;
+    public const int MaxOfficeLocationLength = 109;
+
 }

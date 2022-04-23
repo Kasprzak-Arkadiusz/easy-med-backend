@@ -6,7 +6,7 @@ namespace EasyMed.Domain.Entities;
 public class Doctor : User
 {
     public string Description { get; private set; }
-    public string MedicalSpecialization { get; private set; }
+    public string? MedicalSpecialization { get; private set; }
     public OfficeLocation? OfficeLocation { get; private set; }
     public ICollection<Prescription> Prescriptions { get; private set; }
     public ICollection<Review> Reviews { get; private set; }
@@ -29,18 +29,35 @@ public class Doctor : User
         string description, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
-        Description = description;
+        
+        if (!string.IsNullOrEmpty(description) && Description != description)
+        {
+            Description = description;
+        }
     }
 
-    public void ChangeMedicalSpecialization(MedicalSpecialization specialization)
+    public void ChangeMedicalSpecialization(MedicalSpecialization? specialization)
     {
-        MedicalSpecialization = specialization.ToString();
+        if (specialization is not null && MedicalSpecialization != specialization.ToString())
+        {
+            MedicalSpecialization = specialization.ToString();
+        }
     }
 
     public override string GetFullName() => $"dr. {FirstName} {LastName}";
 
-    public void ChangeOfficeLocation(OfficeLocation officeLocation)
+    public void UpdateOfficeLocation(string fullAddress)
     {
-        OfficeLocation = officeLocation;
+        (string street, string house, string city, string postalCode) =
+            OfficeLocation.FullAddressToSeparateStrings(fullAddress);
+        
+        if (OfficeLocation is null)
+        {
+            OfficeLocation = OfficeLocation.Create(street, house, city, postalCode, this);
+        }
+        else
+        {
+            OfficeLocation.Update(street, house, city, postalCode);
+        }
     }
 }

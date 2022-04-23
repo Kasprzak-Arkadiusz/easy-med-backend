@@ -1,4 +1,6 @@
-﻿using EasyMed.Application.Queries.Doctors;
+﻿using Api.Dtos.Doctor;
+using EasyMed.Application.Commands;
+using EasyMed.Application.Queries.Doctors;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
@@ -69,5 +71,22 @@ public class DoctorController : BaseController
     {
         var medicalSpecializations = await Mediator.Send(new GetMedicalSpecializationsQuery());
         return Ok(medicalSpecializations);
+    }
+
+    /// <summary>
+    /// Update doctor information
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned medical specializations</response>
+    /// <response code="400">Validation or logic error</response>
+    [HttpPatch("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
+    {
+        await Mediator.Send(new UpdateDoctorInformationCommand(id, dto.FirstName, dto.LastName, dto.Email,
+            dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
+
+        return Ok();
     }
 }
