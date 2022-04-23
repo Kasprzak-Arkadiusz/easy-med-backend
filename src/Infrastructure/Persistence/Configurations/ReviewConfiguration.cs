@@ -15,11 +15,8 @@ public class ReviewConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(r => r.Rating)
             .HasColumnType("smallint")
             .IsRequired();
-        builder.Property(r => r.Date)
-            .HasColumnType("date")
-            .HasConversion<DateOnlyConverter, DateOnlyComparer>()
+        builder.Property(r => r.CreatedAt)
             .IsRequired();
-        
         builder.HasKey(r => r.Id);
         builder.HasOne(r => r.Patient)
             .WithMany(pt => pt.Reviews)

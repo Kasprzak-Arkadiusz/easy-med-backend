@@ -47,13 +47,17 @@ builder.Services.AddAuthentication(option =>
 {
     cfg.RequireHttpsMetadata = false;
     cfg.SaveToken = true;
-    cfg.TokenValidationParameters = new TokenValidationParameters()
+    cfg.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidIssuer = applicationSettings.AccessTokenSettings.JwtIssuer,
-        ValidAudience = applicationSettings.AccessTokenSettings.JwtIssuer,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.AccessTokenSettings.Key))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.AccessTokenSettings.Key)),
+        ValidateIssuerSigningKey = true,
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = true,
+        ClockSkew = TimeSpan.Zero
     };
 });
+
 
 builder.Services
     .AddControllers()
@@ -75,7 +79,9 @@ app.UseMiddleware<ErrorHandlingMiddleware>();
 
 app.UseCors("FrontendPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 if (app.Environment.IsDevelopment())

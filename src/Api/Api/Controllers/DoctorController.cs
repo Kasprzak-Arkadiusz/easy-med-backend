@@ -3,12 +3,11 @@ using EasyMed.Application.Commands;
 using EasyMed.Application.Queries.Doctors;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 public class DoctorController : BaseController
 {
     /// <summary>
@@ -18,6 +17,7 @@ public class DoctorController : BaseController
     /// <returns>Doctors with requested specialization</returns>
     /// <response code="200">Successfully returned doctors</response>
     /// <response code="400">Validation or logic error (e.g. MedicalSpecialization does not exist)</response>
+    [Authorize]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -43,6 +43,7 @@ public class DoctorController : BaseController
     /// <returns>Free terms for a specific doctor</returns>
     /// <response code="200">Successfully returned free terms</response>
     /// <response code="400">Validation or logic error</response>
+    [Authorize]
     [HttpGet("freeTerms")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -65,6 +66,7 @@ public class DoctorController : BaseController
     /// </summary>
     /// <returns>Medical specializations</returns>
     /// <response code="200">Successfully returned medical specializations</response>
+    [Authorize]
     [HttpGet("specializations")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<MedicalSpecialization>>> GetMedicalSpecializations()
@@ -79,14 +81,53 @@ public class DoctorController : BaseController
     /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully returned medical specializations</response>
     /// <response code="400">Validation or logic error</response>
+    [Authorize]
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
     {
-        await Mediator.Send(new UpdateDoctorInformationCommand(id, dto.FirstName, dto.LastName, dto.Email,
-            dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
+        await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+            dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
         return Ok();
+    }
+
+    /// <summary>
+    /// Get doctor reviews
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned reviews</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Doctor not found</response>
+    [Authorize]
+    [HttpGet("{id:int}/reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetDoctorReviews(int id)
+    {
+        var reviews = await Mediator.Send(new GetReviewsByDoctorIdQuery(id));
+        return Ok(reviews);
+    }
+
+    /// <summary>
+    /// Create review
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <param name="createReviewDto">Description and rating</param>
+    /// <response code="200">Successfully created review</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Doctor or patient not found</response>
+    [Authorize]
+    [HttpPost("{id:int}/reviews")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> CreateReview(int id, [FromBody] CreateReviewDto createReviewDto)
+    {
+        var currentUserId = RequireUserId();
+        var reviews = await Mediator.Send(
+            new CreateReviewCommand(currentUserId, id, createReviewDto.Description, createReviewDto.Rating)
+        );
+        return Ok(reviews);
     }
 }

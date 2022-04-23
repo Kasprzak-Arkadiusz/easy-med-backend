@@ -110,13 +110,11 @@ public static class DatabaseSeeder
         {
             Review.Create(
                 "Doktor Elżbieta Nowak – bardzo profesjonalna i miła Pani doktor, trafna diagnoza," +
-                " przepisane leczenie szybko przyniosło ulgę. Dziękuje!", 4, new DateOnly(2022, 04, 10), doctors[2],
-                patients[0]),
+                " przepisane leczenie szybko przyniosło ulgę. Dziękuje!",4, doctors[2], patients[0]),
             Review.Create(
                 "Z czystym sumieniem polecam dr. Konrada. Pełen profesjonalizm, wiedza i siła spokoju " +
                 "i umiejętność wytłumaczenia mi przebiegu choroby, spowodowały, że po 30 minutach rozmowy z p. doktorem " +
-                "jestem spokojny o zdrowie moje mamy.", 5, new DateOnly(2022, 04, 12), doctors[1],
-                patients[1])
+                "jestem spokojny o zdrowie moje mamy.", 5, doctors[1], patients[1])
         };
         await context.Reviews.AddRangeAsync(reviews);
     }

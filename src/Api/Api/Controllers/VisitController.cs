@@ -1,12 +1,11 @@
 ﻿using Api.Dtos.Visit;
 using EasyMed.Application.Commands;
 using EasyMed.Application.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
 public class VisitController : BaseController
 {
     /// <summary>
@@ -15,6 +14,7 @@ public class VisitController : BaseController
     /// <returns>A newly created visit</returns>
     /// <response code="201">Visit successfully created</response>
     /// <response code="400">Validation or logic error</response>
+    [Authorize]
     [HttpPost]
     [ProducesResponseType(typeof(ReserveVisitViewModel), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -29,6 +29,7 @@ public class VisitController : BaseController
     /// </summary>
     /// <response code="200">Visit successfully cancelled</response>
     /// <response code="400">Validation or logic error</response>
+    [Authorize]
     [HttpDelete("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

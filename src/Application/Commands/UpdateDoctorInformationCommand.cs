@@ -9,6 +9,7 @@ namespace EasyMed.Application.Commands;
 
 public class UpdateDoctorInformationCommand : IRequest<Unit>
 {
+    public int CurrentUserId { get; }
     public int Id { get; }
     public string FirstName { get; }
     public string LastName { get; }
@@ -18,9 +19,11 @@ public class UpdateDoctorInformationCommand : IRequest<Unit>
     public string OfficeLocation { get; }
     public MedicalSpecialization? MedicalSpecialization { get; }
 
-    public UpdateDoctorInformationCommand(int id, string firstName, string lastName, string email, string telephone,
+    public UpdateDoctorInformationCommand(int currentUserId, int id, string firstName, string lastName, string email,
+        string telephone,
         string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
     {
+        CurrentUserId = currentUserId;
         Id = id;
         FirstName = firstName;
         LastName = lastName;
@@ -41,25 +44,26 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
         _context = context;
     }
 
-    public async Task<Unit> Handle(UpdateDoctorInformationCommand request, CancellationToken cancellationToken)
+    public async Task<Unit> Handle(UpdateDoctorInformationCommand command, CancellationToken cancellationToken)
     {
+        Authorize(command.Id, command.CurrentUserId);
         var doctor = await _context.Doctors
             .Include(d => d.OfficeLocation)
-            .FirstOrDefaultAsync(d => d.Id == request.Id, cancellationToken);
+            .FirstOrDefaultAsync(d => d.Id == command.Id, cancellationToken);
         if (doctor == default)
         {
             throw new BadRequestException("Doctor with given id does not exist");
         }
 
-        doctor.UpdatePersonalInformation(request.FirstName, request.LastName, request.Telephone, request.Description,
-            request.Email);
-        doctor.ChangeMedicalSpecialization(request.MedicalSpecialization);
-        
-        if (!string.IsNullOrEmpty(request.OfficeLocation))
+        doctor.UpdatePersonalInformation(command.FirstName, command.LastName, command.Telephone, command.Description,
+            command.Email);
+        doctor.ChangeMedicalSpecialization(command.MedicalSpecialization);
+
+        if (!string.IsNullOrEmpty(command.OfficeLocation))
         {
             try
             {
-                doctor.UpdateOfficeLocation(request.OfficeLocation);
+                doctor.UpdateOfficeLocation(command.OfficeLocation);
             }
             catch (MissingAddressDetailsException e)
             {
@@ -70,5 +74,13 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
         await _context.SaveChangesAsync(cancellationToken);
 
         return Unit.Value;
+    }
+
+    private static void Authorize(int id, int currentUserId)
+    {
+        if (id != currentUserId)
+        {
+            throw new ForbiddenAccessException("You are not authorized");
+        }
     }
 }

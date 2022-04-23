@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,4 +15,15 @@ public class BaseController : ControllerBase
 {
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+
+    protected int RequireUserId()
+    {
+        var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+        if (idClaim == default)
+        {
+            throw new ("You are not authenticated");
+        }
+
+        return int.Parse(idClaim.Value);
+    }
 }
