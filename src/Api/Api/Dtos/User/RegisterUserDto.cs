@@ -28,7 +28,8 @@ public class RegisterUserDto
     public string RepeatPassword { get; }
     public Role Role { get; }
 
-    public RegisterUserDto(string firstName, string lastName, string emailAddress, string password, string repeatPassword, Role role)
+    public RegisterUserDto(string firstName, string lastName, string emailAddress, string password,
+        string repeatPassword, Role role)
     {
         FirstName = firstName;
         LastName = lastName;
