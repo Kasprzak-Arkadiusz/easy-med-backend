@@ -23,7 +23,7 @@ public class UserController : BaseController
     public async Task<ActionResult> Register([FromBody] RegisterUserDto dto)
     {
         var user = await Mediator.Send(new RegisterUserCommand(dto.FirstName, dto.LastName, dto.EmailAddress,
-            dto.Password, dto.RegisterAs));
+            dto.Password, dto.Role));
         return CreatedAtRoute(null, user);
     }
 
@@ -37,7 +37,7 @@ public class UserController : BaseController
     [HttpPost("login")]
     public async Task<ActionResult<AuthViewModel>> Login([FromBody] LoginUserDto dto)
     {
-        var auth = await Mediator.Send(new LoginUserCommand(dto.EmailAddress, dto.Password, dto.LoginAs));
+        var auth = await Mediator.Send(new LoginUserCommand(dto.EmailAddress, dto.Password, dto.Role));
         return Ok(auth);
     }
 }

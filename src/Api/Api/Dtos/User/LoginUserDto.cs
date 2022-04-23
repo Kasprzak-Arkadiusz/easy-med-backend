@@ -10,7 +10,7 @@ public class LoginUserDtoValidator : AbstractValidator<LoginUserDto>
     {
         RuleFor(dto => dto.EmailAddress).SetValidator(new EmailAddressValidator());
         RuleFor(dto => dto.Password).NotEmpty();
-        RuleFor(dto => dto.LoginAs).IsInEnum();
+        RuleFor(dto => dto.Role).IsInEnum();
     }
 }
 
@@ -18,12 +18,12 @@ public class LoginUserDto
 {
     public string EmailAddress { get; }
     public string Password { get; }
-    public Role LoginAs { get; }
+    public Role Role { get; }
 
-    public LoginUserDto(string emailAddress, string password, Role loginAs)
+    public LoginUserDto(string emailAddress, string password, Role role)
     {
         EmailAddress = emailAddress;
         Password = password;
-        LoginAs = loginAs;
+        Role = role;
     }
 }
