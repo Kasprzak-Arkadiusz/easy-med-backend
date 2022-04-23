@@ -1,6 +1,5 @@
 using System.Security.Claims;
 using EasyMed.Application.Common.Exceptions;
-using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
