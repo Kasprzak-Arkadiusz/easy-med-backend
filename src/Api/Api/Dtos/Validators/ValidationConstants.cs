@@ -12,5 +12,5 @@ public static class ValidationConstants
     public const int MaxDoctorDescriptionLength = 200;
     public const int MaxOfficeLocationLength = 109;
     public const int MinDescriptionLength = 6;
-    public const int MaxDescriptionLength = 500;
+    public const int MaxDescriptionLength = 400;
 }
