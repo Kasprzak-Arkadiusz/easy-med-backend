@@ -20,8 +20,7 @@ public class UpdateDoctorInformationCommand : IRequest<Unit>
     public MedicalSpecialization? MedicalSpecialization { get; }
 
     public UpdateDoctorInformationCommand(int currentUserId, int id, string firstName, string lastName, string email,
-        string telephone,
-        string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
+        string telephone, string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
     {
         CurrentUserId = currentUserId;
         Id = id;
