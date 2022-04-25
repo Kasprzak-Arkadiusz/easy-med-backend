@@ -15,8 +15,8 @@ public class UpdatePatientInformationDtoValidator : AbstractValidator<UpdatePati
             .When(dto => !string.IsNullOrEmpty(dto.Email));
         RuleFor(dto => dto.Telephone).MaximumLength(ValidationConstants.MaxTelephoneNumberLength)
             .WithMessage("Telephone must be less than {MaxLength} characters. {TotalLength} characters entered.");
-        RuleFor(dto => dto.Pesel).Length(ValidationConstants.ExactPeselLength)
-            .WithMessage("Pesel length must be {MaxLength} characters. {TotalLength} characters entered.");
+        RuleFor(dto => dto.PersonalIdentityNumber).Length(ValidationConstants.ExactPersonalIdentityNumberLength)
+            .WithMessage("Personal identity number length must be {MaxLength} characters. {TotalLength} characters entered.");
     }
 }
 
@@ -26,14 +26,14 @@ public class UpdatePatientInformationDto
     public string LastName { get; }
     public string Email { get; }
     public string Telephone { get; }
-    public string Pesel { get; }
+    public string PersonalIdentityNumber { get; }
 
-    public UpdatePatientInformationDto(string firstName, string lastName, string email, string telephone, string pesel)
+    public UpdatePatientInformationDto(string firstName, string lastName, string email, string telephone, string personalIdentityNumber)
     {
         FirstName = firstName;
         LastName = lastName;
         Email = email;
         Telephone = telephone;
-        Pesel = pesel;
+        PersonalIdentityNumber = personalIdentityNumber;
     }
 }

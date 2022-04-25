@@ -15,10 +15,10 @@ public class UpdatePatientInformationCommand : IRequest<UpdatedPatientInformatio
     public string LastName { get; }
     public string Email { get; }
     public string Telephone { get; }
-    public string Pesel { get; }
+    public string PersonalIdentityNumber { get; }
 
     public UpdatePatientInformationCommand(int currentUserId, int id, string firstName, string lastName,
-        string email, string telephone, string pesel)
+        string email, string telephone, string personalIdentityNumber)
     {
         CurrentUserId = currentUserId;
         Id = id;
@@ -26,7 +26,7 @@ public class UpdatePatientInformationCommand : IRequest<UpdatedPatientInformatio
         LastName = lastName;
         Email = email;
         Telephone = telephone;
-        Pesel = pesel;
+        PersonalIdentityNumber = personalIdentityNumber;
     }
 }
 
@@ -53,7 +53,7 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
             throw new BadRequestException("Patient with given id does not exist");
         }
 
-        patient.UpdatePersonalInformation(command.FirstName, command.LastName, command.Telephone, command.Pesel,
+        patient.UpdatePersonalInformation(command.FirstName, command.LastName, command.Telephone, command.PersonalIdentityNumber,
             command.Email);
         
         await _context.SaveChangesAsync(cancellationToken);

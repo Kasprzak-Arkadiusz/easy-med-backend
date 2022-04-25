@@ -38,7 +38,7 @@ public class PatientController : BaseController
     public async Task<ActionResult> UpdatePatientInformation(int id, [FromBody] UpdatePatientInformationDto dto)
     {
         var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
-            dto.Email, dto.Telephone, dto.Pesel));
+            dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
 
         return Ok(viewModel);
     }
