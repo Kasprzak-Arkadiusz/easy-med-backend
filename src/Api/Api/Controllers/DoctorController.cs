@@ -87,10 +87,10 @@ public class DoctorController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
     {
-        await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
             dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
-        return Ok();
+        return Ok(viewModel);
     }
 
     /// <summary>
