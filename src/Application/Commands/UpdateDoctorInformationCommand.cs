@@ -1,5 +1,7 @@
-﻿using EasyMed.Application.Common.Exceptions;
+﻿using AutoMapper;
+using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using EasyMed.Domain.Exceptions;
 using MediatR;
@@ -7,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Commands;
 
-public class UpdateDoctorInformationCommand : IRequest<Unit>
+public class UpdateDoctorInformationCommand : IRequest<UpdatedDoctorInformationViewModel>
 {
     public int CurrentUserId { get; }
     public int Id { get; }
@@ -20,8 +22,7 @@ public class UpdateDoctorInformationCommand : IRequest<Unit>
     public MedicalSpecialization? MedicalSpecialization { get; }
 
     public UpdateDoctorInformationCommand(int currentUserId, int id, string firstName, string lastName, string email,
-        string telephone,
-        string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
+        string telephone, string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
     {
         CurrentUserId = currentUserId;
         Id = id;
@@ -35,16 +36,18 @@ public class UpdateDoctorInformationCommand : IRequest<Unit>
     }
 }
 
-public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, Unit>
+public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, UpdatedDoctorInformationViewModel>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IMapper _mapper;
 
-    public UpdateDoctorInformationCommandHandler(IApplicationDbContext context)
+    public UpdateDoctorInformationCommandHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<Unit> Handle(UpdateDoctorInformationCommand command, CancellationToken cancellationToken)
+    public async Task<UpdatedDoctorInformationViewModel> Handle(UpdateDoctorInformationCommand command, CancellationToken cancellationToken)
     {
         Authorize(command.Id, command.CurrentUserId);
         var doctor = await _context.Doctors
@@ -73,7 +76,9 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
 
         await _context.SaveChangesAsync(cancellationToken);
 
-        return Unit.Value;
+        var viewModel = _mapper.Map<UpdatedDoctorInformationViewModel>(doctor);
+
+        return viewModel;
     }
 
     private static void Authorize(int id, int currentUserId)

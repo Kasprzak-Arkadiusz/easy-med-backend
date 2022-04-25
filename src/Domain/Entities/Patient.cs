@@ -26,6 +26,10 @@ public class Patient : User
         string telephoneNumber, string personalIdentityNumber, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
-        PersonalIdentityNumber = personalIdentityNumber;
+
+        if (!string.IsNullOrEmpty(personalIdentityNumber) && PersonalIdentityNumber != personalIdentityNumber)
+        {
+            PersonalIdentityNumber = personalIdentityNumber;
+        }
     }
 }

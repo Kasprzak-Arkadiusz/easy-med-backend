@@ -79,18 +79,18 @@ public class DoctorController : BaseController
     /// Update doctor information
     /// </summary>
     /// <param name="id">Doctor id</param>
-    /// <response code="200">Successfully returned medical specializations</response>
+    /// <response code="200">Successfully updated doctor information</response>
     /// <response code="400">Validation or logic error</response>
     [Authorize]
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
     {
-        await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
             dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
-        return Ok();
+        return Ok(viewModel);
     }
 
     /// <summary>
@@ -103,6 +103,7 @@ public class DoctorController : BaseController
     [Authorize]
     [HttpGet("{id:int}/reviews")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetDoctorReviews(int id)
     {
@@ -121,6 +122,7 @@ public class DoctorController : BaseController
     [Authorize]
     [HttpPost("{id:int}/reviews")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> CreateReview(int id, [FromBody] CreateReviewDto createReviewDto)
     {

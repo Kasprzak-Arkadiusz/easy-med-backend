@@ -1,4 +1,6 @@
-﻿using EasyMed.Application.Queries.Patients;
+﻿using Api.Dtos.Patient;
+using EasyMed.Application.Commands;
+using EasyMed.Application.Queries.Patients;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,5 +23,23 @@ public class PatientController : BaseController
     {
         var reviews = await Mediator.Send(new GetReviewsByPatientIdQuery(id));
         return Ok(reviews);
+    }
+    
+    /// <summary>
+    /// Update patient information
+    /// </summary>
+    /// <param name="id">Patient id</param>
+    /// <response code="200">Successfully updated patient information</response>
+    /// <response code="400">Validation or logic error</response>
+    [Authorize]
+    [HttpPatch("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> UpdatePatientInformation(int id, [FromBody] UpdatePatientInformationDto dto)
+    {
+        var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+            dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
+
+        return Ok(viewModel);
     }
 }
