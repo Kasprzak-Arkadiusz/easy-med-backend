@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,7 @@ public class GetPatientInformation : IRequest<PatientInformationViewModel>
 {
     public int CurrentUserId { get; }
     public int Id { get; }
+
     public GetPatientInformation(int currentUserId, int id)
     {
         CurrentUserId = currentUserId;
@@ -32,10 +34,9 @@ public class GetPatientInformationHandler : IRequestHandler<GetPatientInformatio
     public async Task<PatientInformationViewModel> Handle(GetPatientInformation query,
         CancellationToken cancellationToken)
     {
-        Authorize(query.Id, query.CurrentUserId);
+        AuthorizationService.VerifyIfSameUser(query.Id, query.CurrentUserId, "You cannot get not yours information");
         var patient = await _context.Patients
             .FirstOrDefaultAsync(d => d.Id == query.Id, cancellationToken);
-        
         if (patient == default)
         {
             throw new NotFoundException("Patient not found");
@@ -45,13 +46,4 @@ public class GetPatientInformationHandler : IRequestHandler<GetPatientInformatio
 
         return viewModel;
     }
-    
-    private static void Authorize(int id, int currentUserId)
-    {
-        if (id != currentUserId)
-        {
-            throw new ForbiddenAccessException("You are not authorized");
-        }
-    }
-    
 }

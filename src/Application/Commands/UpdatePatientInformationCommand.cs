@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -45,7 +46,8 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
     public async Task<PatientInformationViewModel> Handle(UpdatePatientInformationCommand command,
         CancellationToken cancellationToken)
     {
-        Authorize(command.Id, command.CurrentUserId);
+        AuthorizationService.VerifyIfSameUser(command.Id, command.CurrentUserId,
+            "You cannot update not yours information");
         var patient = await _context.Patients
             .FirstOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
         if (patient == default)
@@ -61,13 +63,5 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
         var viewModel = _mapper.Map<PatientInformationViewModel>(patient);
         
         return viewModel;
-    }
-
-    private static void Authorize(int id, int currentUserId)
-    {
-        if (id != currentUserId)
-        {
-            throw new ForbiddenAccessException("You are not authorized");
-        }
     }
 }

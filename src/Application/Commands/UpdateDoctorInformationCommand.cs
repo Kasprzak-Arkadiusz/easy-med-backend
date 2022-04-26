@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using EasyMed.Domain.Exceptions;
@@ -36,7 +37,8 @@ public class UpdateDoctorInformationCommand : IRequest<DoctorInformationViewMode
     }
 }
 
-public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, DoctorInformationViewModel>
+public class
+    UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDoctorInformationCommand, DoctorInformationViewModel>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -47,9 +49,11 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
         _mapper = mapper;
     }
 
-    public async Task<DoctorInformationViewModel> Handle(UpdateDoctorInformationCommand command, CancellationToken cancellationToken)
+    public async Task<DoctorInformationViewModel> Handle(UpdateDoctorInformationCommand command,
+        CancellationToken cancellationToken)
     {
-        Authorize(command.Id, command.CurrentUserId);
+        AuthorizationService.VerifyIfSameUser(command.Id, command.CurrentUserId,
+            "You cannot update not yours information");
         var doctor = await _context.Doctors
             .Include(d => d.OfficeLocation)
             .FirstOrDefaultAsync(d => d.Id == command.Id, cancellationToken);
@@ -79,13 +83,5 @@ public class UpdateDoctorInformationCommandHandler : IRequestHandler<UpdateDocto
         var viewModel = _mapper.Map<DoctorInformationViewModel>(doctor);
 
         return viewModel;
-    }
-
-    private static void Authorize(int id, int currentUserId)
-    {
-        if (id != currentUserId)
-        {
-            throw new ForbiddenAccessException("You are not authorized");
-        }
     }
 }
