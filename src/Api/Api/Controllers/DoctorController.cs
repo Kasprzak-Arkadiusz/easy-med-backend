@@ -102,7 +102,7 @@ public class DoctorController : BaseController
     /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully updated doctor information</response>
     /// <response code="400">Validation or logic error</response>
-    /// <response code="403">Cannot get not yours information</response>
+    /// <response code="403">Cannot update not yours information</response>
     [Authorize]
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
