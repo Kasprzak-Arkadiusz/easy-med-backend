@@ -46,11 +46,12 @@ public class GetPrescriptionsByPatientIdQueryHandler
         }
 
         var prescriptions = await _dbContext.Prescriptions
-            .Where(r => r.PatientId == query.PatientId)
-            .OrderByDescending(r => r.DateOfIssue)
-            .Include(r => r.Patient)
-            .Include(r => r.Doctor)
-            .Select(r => _mapper.Map<PrescriptionViewModel>(r))
+            .Where(p => p.PatientId == query.PatientId)
+            .OrderByDescending(p => p.DateOfIssue)
+            .Include(p => p.Patient)
+            .Include(p => p.Doctor)
+            .Include(p => p.Medicines)
+            .Select(p => _mapper.Map<PrescriptionViewModel>(p))
             .ToListAsync(cancellationToken);
 
         return prescriptions;
