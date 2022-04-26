@@ -6,43 +6,44 @@ using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
-namespace EasyMed.Application.Queries.Patients;
+namespace EasyMed.Application.Queries.Doctors;
 
-public class GetPatientInformation : IRequest<PatientInformationViewModel>
+public class GetDoctorInformationQuery : IRequest<DoctorInformationViewModel>
 {
     public int CurrentUserId { get; }
     public int Id { get; }
 
-    public GetPatientInformation(int currentUserId, int id)
+    public GetDoctorInformationQuery(int currentUserId, int id)
     {
         CurrentUserId = currentUserId;
         Id = id;
     }
 }
 
-public class GetPatientInformationHandler : IRequestHandler<GetPatientInformation, PatientInformationViewModel>
+public class GetDoctorInformationQueryHandler : IRequestHandler<GetDoctorInformationQuery, DoctorInformationViewModel>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public GetPatientInformationHandler(IApplicationDbContext context, IMapper mapper)
+    public GetDoctorInformationQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
     }
 
-    public async Task<PatientInformationViewModel> Handle(GetPatientInformation query,
+    public async Task<DoctorInformationViewModel> Handle(GetDoctorInformationQuery query,
         CancellationToken cancellationToken)
     {
         AuthorizationService.VerifyIfSameUser(query.Id, query.CurrentUserId, "You cannot get not yours information");
-        var patient = await _context.Patients
+        var doctor = await _context.Doctors
+            .Include(d => d.OfficeLocation)
             .FirstOrDefaultAsync(d => d.Id == query.Id, cancellationToken);
-        if (patient == default)
+        if (doctor == default)
         {
-            throw new NotFoundException("Patient not found");
+            throw new NotFoundException("Doctor not found");
         }
 
-        var viewModel = _mapper.Map<PatientInformationViewModel>(patient);
+        var viewModel = _mapper.Map<DoctorInformationViewModel>(doctor);
 
         return viewModel;
     }

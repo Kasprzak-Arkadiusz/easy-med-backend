@@ -41,7 +41,7 @@ public class PatientController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetPatientInformation(int id)
     {
-        var viewModel = await Mediator.Send(new GetPatientInformation(RequireUserId(), id));
+        var viewModel = await Mediator.Send(new GetPatientInformationQuery(RequireUserId(), id));
 
         return Ok(viewModel);
     }

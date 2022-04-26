@@ -76,15 +76,38 @@ public class DoctorController : BaseController
     }
 
     /// <summary>
+    /// Get doctor information
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned doctor information</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Cannot get not yours information</response>
+    /// <response code="404">Doctor not found</response>
+    [Authorize]
+    [HttpGet("{id:int}/details")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetDoctorInformation(int id)
+    {
+        var viewModel = await Mediator.Send(new GetDoctorInformationQuery(RequireUserId(), id));
+
+        return Ok(viewModel);
+    }
+
+    /// <summary>
     /// Update doctor information
     /// </summary>
     /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully updated doctor information</response>
     /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Cannot get not yours information</response>
     [Authorize]
     [HttpPatch("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
     {
         var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
