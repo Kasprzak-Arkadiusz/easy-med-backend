@@ -32,10 +32,10 @@ public class GetReviewsByPatientIdQueryValidator
     public async Task<IEnumerable<ReviewViewModel>> Handle(GetReviewsByPatientIdQuery query,
         CancellationToken cancellationToken)
     {
-        var doctor = await _dbContext.Patients
+        var patient = await _dbContext.Patients
             .FirstOrDefaultAsync(d => d.Id == query.PatientId, cancellationToken);
 
-        if (doctor == default)
+        if (patient == default)
         {
             throw new NotFoundException("Patient not found");
         }
