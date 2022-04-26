@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Commands;
 
-public class UpdatePatientInformationCommand : IRequest<UpdatedPatientInformationViewModel>
+public class UpdatePatientInformationCommand : IRequest<PatientInformationViewModel>
 {
     public int CurrentUserId { get; }
     public int Id { get; }
@@ -31,7 +31,7 @@ public class UpdatePatientInformationCommand : IRequest<UpdatedPatientInformatio
 }
 
 public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePatientInformationCommand,
-    UpdatedPatientInformationViewModel>
+    PatientInformationViewModel>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -42,7 +42,7 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
         _mapper = mapper;
     }
 
-    public async Task<UpdatedPatientInformationViewModel> Handle(UpdatePatientInformationCommand command,
+    public async Task<PatientInformationViewModel> Handle(UpdatePatientInformationCommand command,
         CancellationToken cancellationToken)
     {
         Authorize(command.Id, command.CurrentUserId);
@@ -58,7 +58,7 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
         
         await _context.SaveChangesAsync(cancellationToken);
 
-        var viewModel = _mapper.Map<UpdatedPatientInformationViewModel>(patient);
+        var viewModel = _mapper.Map<PatientInformationViewModel>(patient);
         
         return viewModel;
     }
