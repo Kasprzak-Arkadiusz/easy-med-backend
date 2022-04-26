@@ -4,7 +4,7 @@ using EasyMed.Domain.Entities;
 
 namespace EasyMed.Application.ViewModels;
 
-public class UpdatedPatientInformationViewModel : IMapFrom<Patient>
+public class PatientInformationViewModel : IMapFrom<Patient>
 {
     public int Id { get; set; }
     public string FirstName { get; set; }
@@ -15,7 +15,7 @@ public class UpdatedPatientInformationViewModel : IMapFrom<Patient>
 
     public void Mapping(Profile profile)
     {
-        profile.CreateMap<Patient, UpdatedPatientInformationViewModel>()
+        profile.CreateMap<Patient, PatientInformationViewModel>()
             .ForMember(vm => vm.Email, opt => opt.MapFrom(p => p.EmailAddress))
             .ForMember(vm => vm.Telephone, opt => opt.MapFrom(p => p.TelephoneNumber));
     }
