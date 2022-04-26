@@ -1,6 +1,7 @@
 ﻿using Api.Dtos.Patient;
 using EasyMed.Application.Commands;
 using EasyMed.Application.Queries.Patients;
+using EasyMed.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,10 +19,11 @@ public class PatientController : BaseController
     [Authorize]
     [HttpGet("{id:int}/reviews")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetDoctorReviews(int id)
+    public async Task<ActionResult> GetPatientReviews(int id)
     {
-        var reviews = await Mediator.Send(new GetReviewsByPatientIdQuery(id));
+        var reviews = await Mediator.Send(new GetReviewsByPatientIdQuery(RequireUserId(), id));
         return Ok(reviews);
     }
     
@@ -64,5 +66,22 @@ public class PatientController : BaseController
             dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
 
         return Ok(viewModel);
+    }
+    
+    /// <summary>
+    /// Get prescriptions created for patient
+    /// </summary>
+    /// <param name="id">Patient id</param>
+    /// <response code="200">Successfully returned prescriptions</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Patient not found</response>
+    [Authorize]
+    [HttpGet("{id:int}/prescriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetPatientPrescriptions(int id)
+    {
+        var prescriptions = await Mediator.Send(new GetPrescriptionsByPatientIdQuery(RequireUserId(), id));
+        return Ok(prescriptions);
     }
 }
