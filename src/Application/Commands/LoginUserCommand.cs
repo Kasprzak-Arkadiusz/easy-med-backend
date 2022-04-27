@@ -60,6 +60,7 @@ public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, AuthVie
         return new AuthViewModel
         {
             AccessToken = accessToken,
+            Id = user.Id,
             Role = user.Role.ToString(),
             EmailAddress = user.EmailAddress,
             FirstName = user.FirstName!,

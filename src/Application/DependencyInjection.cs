@@ -2,8 +2,6 @@
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Services;
 using EasyMed.Application.Utils.SecurityTokens;
-using EasyMed.Domain.Entities;
-using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

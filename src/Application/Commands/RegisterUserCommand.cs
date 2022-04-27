@@ -1,6 +1,7 @@
 using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
+using EasyMed.Application.Utils.SecurityTokens;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Entities;
 using EasyMed.Domain.Enums;
@@ -11,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Commands;
 
-public class RegisterUserCommand : IRequest<UserViewModel>
+public class RegisterUserCommand : IRequest<AuthViewModel>
 {
     public string FirstName { get; }
     public string LastName { get; }
@@ -29,18 +30,18 @@ public class RegisterUserCommand : IRequest<UserViewModel>
     }
 }
 
-public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, UserViewModel>
+public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, AuthViewModel>
 {
     private readonly IApplicationDbContext _applicationDbContext;
-    private readonly IMapper _mapper;
-
-    public RegisterUserCommandHandler(IApplicationDbContext applicationDbContext, IMapper mapper)
+    private readonly ISecurityTokenService _securityTokenService;
+    
+    public RegisterUserCommandHandler(IApplicationDbContext applicationDbContext, ISecurityTokenService securityTokenService)
     {
         _applicationDbContext = applicationDbContext;
-        _mapper = mapper;
+        _securityTokenService = securityTokenService;
     }
 
-    public async Task<UserViewModel> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
+    public async Task<AuthViewModel> Handle(RegisterUserCommand command, CancellationToken cancellationToken)
     {
         var existingUser = await _applicationDbContext.Users
             .FirstOrDefaultAsync(u => u.EmailAddress == command.EmailAddress, cancellationToken);
@@ -60,6 +61,16 @@ public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, U
         await _applicationDbContext.Users.AddAsync(user, cancellationToken);
         await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-        return _mapper.Map<UserViewModel>(user);
+        var accessToken = _securityTokenService.GenerateAccessTokenForUser(user.Id, user.EmailAddress, user.Role);
+
+        return new AuthViewModel
+        {
+            AccessToken = accessToken,
+            Id = user.Id,
+            Role = user.Role.ToString(),
+            EmailAddress = user.EmailAddress,
+            FirstName = user.FirstName!,
+            LastName = user.LastName!
+        };
     }
 }
