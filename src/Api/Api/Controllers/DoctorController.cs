@@ -78,20 +78,17 @@ public class DoctorController : BaseController
     /// <summary>
     /// Get doctor information
     /// </summary>
-    /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully returned doctor information</response>
     /// <response code="400">Validation or logic error</response>
-    /// <response code="403">Cannot get not yours information</response>
     /// <response code="404">Doctor not found</response>
     [Authorize]
-    [HttpGet("{id:int}/details")]
+    [HttpGet("details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetDoctorInformation(int id)
+    public async Task<ActionResult> GetDoctorInformation()
     {
-        var viewModel = await Mediator.Send(new GetDoctorInformationQuery(RequireUserId(), id));
+        var viewModel = await Mediator.Send(new GetDoctorInformationQuery(RequireUserId()));
 
         return Ok(viewModel);
     }
@@ -99,18 +96,15 @@ public class DoctorController : BaseController
     /// <summary>
     /// Update doctor information
     /// </summary>
-    /// <param name="id">Doctor id</param>
     /// <response code="200">Successfully updated doctor information</response>
     /// <response code="400">Validation or logic error</response>
-    /// <response code="403">Cannot update not yours information</response>
     [Authorize]
-    [HttpPatch("{id:int}")]
+    [HttpPatch]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> UpdateDoctorInformation(int id, [FromBody] UpdateDoctorInformationDto dto)
+    public async Task<ActionResult> UpdateDoctorInformation([FromBody] UpdateDoctorInformationDto dto)
     {
-        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), dto.FirstName, dto.LastName,
             dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
         return Ok(viewModel);
