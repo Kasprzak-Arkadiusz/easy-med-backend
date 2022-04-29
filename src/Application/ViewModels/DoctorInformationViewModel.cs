@@ -21,7 +21,7 @@ public class DoctorInformationViewModel : IMapFrom<Doctor>
             .ForMember(vm => vm.Email, opt => opt.MapFrom(d => d.EmailAddress))
             .ForMember(vm => vm.Telephone, opt => opt.MapFrom(d => d.TelephoneNumber))
             .ForMember(vm => vm.OfficeLocation,
-                opt => opt.MapFrom(d => d.OfficeLocation == null ? string.Empty : d.OfficeLocation.GetFullAddress()))
+                opt => opt.MapFrom(d => d.OfficeLocation == null ? string.Empty : d.OfficeLocation.Address))
             .ForMember(vm => vm.MedicalSpecialization, opt => opt.MapFrom(d => d.MedicalSpecialization));
     }
 }

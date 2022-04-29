@@ -8,20 +8,10 @@ public class OfficeLocationConfiguration : IEntityTypeConfiguration<OfficeLocati
 {
     public void Configure(EntityTypeBuilder<OfficeLocation> builder)
     {
-        builder.Property(ol => ol.Street)
-            .HasMaxLength(40)
+        builder.Property(ol => ol.Address)
+            .HasMaxLength(109)
             .IsRequired();
-        builder.Property(ol => ol.House)
-            .HasMaxLength(20)
-            .IsRequired();
-        builder.Property(ol => ol.City)
-            .HasMaxLength(40)
-            .IsRequired();
-        builder.Property(ol => ol.PostalCode)
-            .HasColumnType("char")
-            .HasMaxLength(6)
-            .IsRequired();
-        
+
         builder.HasOne(ol => ol.Doctor)
             .WithOne(d => d.OfficeLocation)
             .HasForeignKey<OfficeLocation>(of => of.DoctorId)

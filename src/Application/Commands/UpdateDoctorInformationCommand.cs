@@ -4,7 +4,6 @@ using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
-using EasyMed.Domain.Exceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -68,14 +67,7 @@ public class
 
         if (!string.IsNullOrEmpty(command.OfficeLocation))
         {
-            try
-            {
-                doctor.UpdateOfficeLocation(command.OfficeLocation);
-            }
-            catch (MissingAddressDetailsException e)
-            {
-                throw new BadRequestException(e.Message);
-            }
+            doctor.UpdateOfficeLocation(command.OfficeLocation);
         }
 
         await _context.SaveChangesAsync(cancellationToken);
