@@ -8,31 +8,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Queries.Patients;
 
-public class GetReviewsByPatientIdQuery : IRequest<IEnumerable<ReviewViewModel>>
+public class GetPrescriptionsByPatientIdQuery : IRequest<IEnumerable<PrescriptionViewModel>>
 {
     public int CurrentUserId { get; }
     public int PatientId { get; }
 
-    public GetReviewsByPatientIdQuery(int currentUserId, int patientId)
+    public GetPrescriptionsByPatientIdQuery(int currentUserId, int patientId)
     {
         CurrentUserId = currentUserId;
         PatientId = patientId;
     }
 }
 
-public class GetReviewsByPatientIdQueryValidator 
-    : IRequestHandler<GetReviewsByPatientIdQuery, IEnumerable<ReviewViewModel>>
+public class GetPrescriptionsByPatientIdQueryHandler
+    : IRequestHandler<GetPrescriptionsByPatientIdQuery, IEnumerable<PrescriptionViewModel>>
 {
     private readonly IApplicationDbContext _dbContext;
     private readonly IMapper _mapper;
 
-    public GetReviewsByPatientIdQueryValidator(IApplicationDbContext dbContext, IMapper mapper)
+    public GetPrescriptionsByPatientIdQueryHandler(IApplicationDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ReviewViewModel>> Handle(GetReviewsByPatientIdQuery query,
+    public async Task<IEnumerable<PrescriptionViewModel>> Handle(GetPrescriptionsByPatientIdQuery query,
         CancellationToken cancellationToken)
     {
         AuthorizationService.VerifyIfSameUser(query.PatientId, query.CurrentUserId, "You cannot get not yours prescriptions");
@@ -44,15 +44,16 @@ public class GetReviewsByPatientIdQueryValidator
         {
             throw new NotFoundException("Patient not found");
         }
-        
-        var reviews = await _dbContext.Reviews
-            .Where(r => r.PatientId == query.PatientId)
-            .OrderByDescending(r => r.CreatedAt)
-            .Include(r => r.Patient)
-            .Include(r => r.Doctor)
-            .Select(r => _mapper.Map<ReviewViewModel>(r))
+
+        var prescriptions = await _dbContext.Prescriptions
+            .Where(p => p.PatientId == query.PatientId)
+            .OrderByDescending(p => p.DateOfIssue)
+            .Include(p => p.Patient)
+            .Include(p => p.Doctor)
+            .Include(p => p.Medicines)
+            .Select(p => _mapper.Map<PrescriptionViewModel>(p))
             .ToListAsync(cancellationToken);
 
-        return reviews;
+        return prescriptions;
     }
 }
