@@ -29,8 +29,9 @@ public class GetVisitsByDoctorIdQueryHandler : IRequestHandler<GetVisitsByDoctor
         _context = context;
         _mapper = mapper;
     }
-    
-    public async Task<IEnumerable<VisitViewModel>> Handle(GetVisitsByDoctorIdQuery query, CancellationToken cancellationToken)
+
+    public async Task<IEnumerable<VisitViewModel>> Handle(GetVisitsByDoctorIdQuery query,
+        CancellationToken cancellationToken)
     {
         var doctor = await _context.Doctors
             .FirstOrDefaultAsync(d => d.Id == query.DoctorId, cancellationToken);
@@ -38,14 +39,17 @@ public class GetVisitsByDoctorIdQueryHandler : IRequestHandler<GetVisitsByDoctor
         {
             throw new NotFoundException("Doctor not found");
         }
-        
+
         var visits = await _context.Visits
             .Where(s => s.Doctor.Id == query.DoctorId)
             .Where(s => query.IsCompleted == null || s.IsCompleted == query.IsCompleted)
+            .Include(v => v.Patient)
+            .Include(v => v.Doctor)
+            .ThenInclude(d => d.OfficeLocation)
             .OrderByDescending(s => s.DateTime)
             .Select(r => _mapper.Map<VisitViewModel>(r))
             .ToListAsync(cancellationToken);
-        
+
         return visits;
     }
 }
