@@ -1,8 +1,6 @@
 ﻿using EasyMed.Application.Common.Interfaces;
-using EasyMed.Application.Queries.Doctors;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Entities;
-using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
 namespace EasyMed.Application.Services;
 
@@ -18,13 +16,11 @@ public class FreeTermService : IFreeTermService
         }
         
         var visitTimeInMinutes = Visit.GetVisitTimeInMinutes();
-        var endTime = schedule.EndTime.AddMinutes(-visitTimeInMinutes);
+        var endTime = schedule.EndDate.AddMinutes(-visitTimeInMinutes);
         var visitList = visits.ToList();
         var isAtLeastOneVisit = visitList.Any();
 
-        for (var currentTime = schedule.StartTime;
-             currentTime <= endTime;
-             currentTime = currentTime.AddMinutes(visitTimeInMinutes))
+        for (var currentTime = schedule.StartDate; currentTime <= endTime; currentTime = currentTime.AddMinutes(visitTimeInMinutes))
         {
             bool isFree = true;
             if (isAtLeastOneVisit)
@@ -38,7 +34,7 @@ public class FreeTermService : IFreeTermService
             {
                 freeTerms.Add(new FreeTermViewModel
                 {
-                    DayOfWeek = Enum.Parse<DayOfWeek>(schedule.DayOfWeek),
+                    DayOfWeek = schedule.StartDate.DayOfWeek,
                     VisitDateTime = new DateTime(visitDate.Year, visitDate.Month,
                         visitDate.Day, currentTime.Hour, currentTime.Minute, 0)
                 });
