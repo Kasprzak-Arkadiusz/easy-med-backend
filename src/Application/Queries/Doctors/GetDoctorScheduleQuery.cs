@@ -40,7 +40,7 @@ public class GetDoctorScheduleQueryHandler : IRequestHandler<GetDoctorScheduleQu
         var schedules = await _context.Schedules
             .Where(s => s.Doctor.Id == query.DoctorId)
             .OrderByDescending(s => s.StartDate)
-            .Select(r => _mapper.Map<ScheduleViewModel>(r))
+            .Select(s => _mapper.Map<ScheduleViewModel>(s))
             .ToListAsync(cancellationToken);
         
         return schedules;

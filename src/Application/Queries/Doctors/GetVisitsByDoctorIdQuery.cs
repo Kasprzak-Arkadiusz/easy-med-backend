@@ -41,13 +41,13 @@ public class GetVisitsByDoctorIdQueryHandler : IRequestHandler<GetVisitsByDoctor
         }
 
         var visits = await _context.Visits
-            .Where(s => s.Doctor.Id == query.DoctorId)
-            .Where(s => query.IsCompleted == null || s.IsCompleted == query.IsCompleted)
+            .Where(v => v.Doctor.Id == query.DoctorId)
+            .Where(v => query.IsCompleted == null || v.IsCompleted == query.IsCompleted)
             .Include(v => v.Patient)
             .Include(v => v.Doctor)
             .ThenInclude(d => d.OfficeLocation)
-            .OrderByDescending(s => s.DateTime)
-            .Select(r => _mapper.Map<VisitViewModel>(r))
+            .OrderByDescending(v => v.DateTime)
+            .Select(v => _mapper.Map<VisitViewModel>(v))
             .ToListAsync(cancellationToken);
 
         return visits;
