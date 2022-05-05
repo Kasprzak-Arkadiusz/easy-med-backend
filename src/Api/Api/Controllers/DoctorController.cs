@@ -160,7 +160,7 @@ public class DoctorController : BaseController
     /// Get doctor schedule
     /// </summary>
     /// <param name="id">Doctor id</param>
-    /// <response code="200">Successfully returned reviews</response>
+    /// <response code="200">Successfully returned doctor's schedule</response>
     /// <response code="400">Validation or logic error</response>
     /// <response code="404">Doctor not found</response>
     [HttpGet("{id:int}/schedule")]
@@ -178,7 +178,7 @@ public class DoctorController : BaseController
     /// </summary>
     /// <param name="id">Doctor id</param>
     /// <param name="isCompleted">Visits filter</param>
-    /// <response code="200">Successfully returned reviews</response>
+    /// <response code="200">Successfully returned visits</response>
     /// <response code="400">Validation or logic error</response>
     /// <response code="404">Doctor not found</response>
     [HttpGet("{id:int}/visits")]
