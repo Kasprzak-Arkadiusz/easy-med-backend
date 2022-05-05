@@ -20,6 +20,6 @@ public class VisitViewModel : IMapFrom<Visit>
         profile.CreateMap<Visit, VisitViewModel>()
             .ForMember(vm => vm.StartDate, opt => opt.MapFrom(v => v.DateTime))
             .ForMember(vm => vm.EndDate, opt => opt.MapFrom(v => v.DateTime.AddMinutes(Visit.GetVisitTimeInMinutes())))
-            .ForMember(vm => vm.Location, opt => opt.MapFrom(v => v.Doctor.OfficeLocation!.GetFullAddress()));
+            .ForMember(vm => vm.Location, opt => opt.MapFrom(v => v.Doctor.OfficeLocation!.Address));
     }
 }
