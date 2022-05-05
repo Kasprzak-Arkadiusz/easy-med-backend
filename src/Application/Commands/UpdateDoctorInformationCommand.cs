@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
-using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using EasyMed.Domain.Exceptions;
@@ -12,7 +11,6 @@ namespace EasyMed.Application.Commands;
 
 public class UpdateDoctorInformationCommand : IRequest<DoctorInformationViewModel>
 {
-    public int CurrentUserId { get; }
     public int Id { get; }
     public string FirstName { get; }
     public string LastName { get; }
@@ -22,10 +20,9 @@ public class UpdateDoctorInformationCommand : IRequest<DoctorInformationViewMode
     public string OfficeLocation { get; }
     public MedicalSpecialization? MedicalSpecialization { get; }
 
-    public UpdateDoctorInformationCommand(int currentUserId, int id, string firstName, string lastName, string email,
+    public UpdateDoctorInformationCommand(int id, string firstName, string lastName, string email,
         string telephone, string description, string officeLocation, MedicalSpecialization? medicalSpecialization)
     {
-        CurrentUserId = currentUserId;
         Id = id;
         FirstName = firstName;
         LastName = lastName;
@@ -52,8 +49,6 @@ public class
     public async Task<DoctorInformationViewModel> Handle(UpdateDoctorInformationCommand command,
         CancellationToken cancellationToken)
     {
-        AuthorizationService.VerifyIfSameUser(command.Id, command.CurrentUserId,
-            "You cannot update not yours information");
         var doctor = await _context.Doctors
             .Include(d => d.OfficeLocation)
             .FirstOrDefaultAsync(d => d.Id == command.Id, cancellationToken);

@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using EasyMed.Application.Common.Exceptions;
 using EasyMed.Application.Common.Interfaces;
-using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +9,6 @@ namespace EasyMed.Application.Commands;
 
 public class UpdatePatientInformationCommand : IRequest<PatientInformationViewModel>
 {
-    public int CurrentUserId { get; }
     public int Id { get; }
     public string FirstName { get; }
     public string LastName { get; }
@@ -18,10 +16,9 @@ public class UpdatePatientInformationCommand : IRequest<PatientInformationViewMo
     public string Telephone { get; }
     public string PersonalIdentityNumber { get; }
 
-    public UpdatePatientInformationCommand(int currentUserId, int id, string firstName, string lastName,
+    public UpdatePatientInformationCommand(int id, string firstName, string lastName,
         string email, string telephone, string personalIdentityNumber)
     {
-        CurrentUserId = currentUserId;
         Id = id;
         FirstName = firstName;
         LastName = lastName;
@@ -46,8 +43,6 @@ public class UpdatePatientInformationCommandHandler : IRequestHandler<UpdatePati
     public async Task<PatientInformationViewModel> Handle(UpdatePatientInformationCommand command,
         CancellationToken cancellationToken)
     {
-        AuthorizationService.VerifyIfSameUser(command.Id, command.CurrentUserId,
-            "You cannot update not yours information");
         var patient = await _context.Patients
             .FirstOrDefaultAsync(p => p.Id == command.Id, cancellationToken);
         if (patient == default)

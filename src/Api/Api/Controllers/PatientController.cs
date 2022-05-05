@@ -30,20 +30,17 @@ public class PatientController : BaseController
     /// <summary>
     /// Get patient information
     /// </summary>
-    /// <param name="id">Patient id</param>
     /// <response code="200">Successfully returned patient information</response>
     /// <response code="400">Validation or logic error</response>
-    /// <response code="403">Cannot get not yours information</response>
     /// <response code="404">Patient not found</response>
     [Authorize]
-    [HttpGet("{id:int}/details")]
+    [HttpGet("details")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> GetPatientInformation(int id)
+    public async Task<ActionResult> GetPatientInformation()
     {
-        var viewModel = await Mediator.Send(new GetPatientInformationQuery(RequireUserId(), id));
+        var viewModel = await Mediator.Send(new GetPatientInformationQuery(RequireUserId()));
 
         return Ok(viewModel);
     }
@@ -51,18 +48,15 @@ public class PatientController : BaseController
     /// <summary>
     /// Update patient information
     /// </summary>
-    /// <param name="id">Patient id</param>
     /// <response code="200">Successfully updated patient information</response>
     /// <response code="400">Validation or logic error</response>
-    /// <response code="403">Cannot update not yours information</response>
     [Authorize]
-    [HttpPatch("{id:int}")]
+    [HttpPatch]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> UpdatePatientInformation(int id, [FromBody] UpdatePatientInformationDto dto)
+    public async Task<ActionResult> UpdatePatientInformation([FromBody] UpdatePatientInformationDto dto)
     {
-        var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), id, dto.FirstName, dto.LastName,
+        var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), dto.FirstName, dto.LastName,
             dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
 
         return Ok(viewModel);
