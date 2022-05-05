@@ -78,4 +78,22 @@ public class PatientController : BaseController
         var prescriptions = await Mediator.Send(new GetPrescriptionsByPatientIdQuery(RequireUserId(), id));
         return Ok(prescriptions);
     }
+    
+    /// <summary>
+    /// Get patient visits
+    /// </summary>
+    /// <param name="id">Patient id</param>
+    /// <param name="isCompleted">Visits filter</param>
+    /// <response code="200">Successfully returned visits</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Patient not found</response>
+    [HttpGet("{id:int}/visits")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetPatientVisits(int id, [FromQuery] bool? isCompleted)
+    {
+        var visits = await Mediator.Send(new GetVisitsByPatientIdQuery(id, isCompleted));
+        return Ok(visits);
+    }
 }
