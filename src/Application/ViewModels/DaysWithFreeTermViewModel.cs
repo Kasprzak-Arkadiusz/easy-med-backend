@@ -1,6 +1,4 @@
-﻿using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
-
-namespace EasyMed.Application.ViewModels;
+﻿namespace EasyMed.Application.ViewModels;
 
 public class DaysWithFreeTermViewModel
 {

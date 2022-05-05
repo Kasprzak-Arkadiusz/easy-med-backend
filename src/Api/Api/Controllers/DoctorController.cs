@@ -121,7 +121,7 @@ public class DoctorController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateDoctorInformation([FromBody] UpdateDoctorInformationDto dto)
     {
-        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), id, dto.FirstName,
+        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), dto.FirstName,
             dto.LastName, dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
         return Ok(viewModel);

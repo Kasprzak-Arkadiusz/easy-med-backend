@@ -16,7 +16,7 @@ public class FreeTermService : IFreeTermService
         }
 
         var visitTimeInMinutes = Visit.GetVisitTimeInMinutes();
-        var endTime = schedule.EndTime.AddMinutes(-visitTimeInMinutes);
+        var endTime = schedule.EndDate.AddMinutes(-visitTimeInMinutes);
         var isAtLeastOneVisit = visits.Any();
 
         for (var currentTime = schedule.StartDate; currentTime <= endTime; currentTime = currentTime.AddMinutes(visitTimeInMinutes))
@@ -53,7 +53,7 @@ public class FreeTermService : IFreeTermService
         {
             var thatDay = today.AddDays(i);
             var scheduleThatDay = schedules
-                    .FirstOrDefault(s => s.DayOfWeek.ToString() == thatDay.DayOfWeek.ToString());
+                    .FirstOrDefault(s => s.StartDate.DayOfWeek == thatDay.DayOfWeek);
 
             if (scheduleThatDay == default)
             {
@@ -61,7 +61,7 @@ public class FreeTermService : IFreeTermService
             }
 
             var numberOfVisitsThatDay = visits.Count(v => v.DateTime.Date == thatDay.Date);
-            var workTimeToday = scheduleThatDay.EndTime - scheduleThatDay.StartTime;
+            var workTimeToday = scheduleThatDay.EndDate - scheduleThatDay.StartDate;
             var possibleNumberOfVisitsThatDay = (int) (workTimeToday.TotalMinutes / Visit.GetVisitTimeInMinutes());
 
             if (numberOfVisitsThatDay != possibleNumberOfVisitsThatDay)
