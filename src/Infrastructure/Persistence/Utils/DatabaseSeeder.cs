@@ -30,15 +30,15 @@ public static class DatabaseSeeder
     {
         var list = new List<Doctor>
         {
-            Doctor.Create("Filip", "Wiśniewski","bestDoctor@gmail.com", "rhinitiS72"),
-            Doctor.Create("Konrad", "Zabrzecki","drKonradZabrzecki123@onet.pl", "12Influenza"),
-            Doctor.Create("Elżbieta", "Nowak","ElzbietaNowakDr44@wp.pl", "tuSsiS123")
+            Doctor.Create("Filip", "Wiśniewski", "bestDoctor@gmail.com", "rhinitiS72"),
+            Doctor.Create("Konrad", "Zabrzecki", "drKonradZabrzecki123@onet.pl", "12Influenza"),
+            Doctor.Create("Elżbieta", "Nowak", "ElzbietaNowakDr44@wp.pl", "tuSsiS123")
         };
         list[0].UpdatePersonalInformation("Filip", "Wiśniewski", "121212121",
             "My name is Doctor Filip. I am licensed health professional " +
             "who maintain and restore human health through the practice of medicine");
-        list[1].UpdatePersonalInformation("Konrad", "Zabrzecki", "637482911","");
-        list[2].UpdatePersonalInformation("Elżbieta", "Nowak", "648123392","");
+        list[1].UpdatePersonalInformation("Konrad", "Zabrzecki", "637482911", "");
+        list[2].UpdatePersonalInformation("Elżbieta", "Nowak", "648123392", "");
         list[1].ChangeMedicalSpecialization(MedicalSpecialization.Geriatrician);
         await applicationDbContext.Doctors.AddRangeAsync(list);
         return list;
@@ -48,8 +48,8 @@ public static class DatabaseSeeder
     {
         var patients = new List<Patient>
         {
-            Patient.Create("Michał", "Nowakowski","MichalNowakowski6428@gmail.com", "Michal6428"),
-            Patient.Create("Janek", "Kowalski","JohnDoe@gmail.com", "DoeJohn13")
+            Patient.Create("Michał", "Nowakowski", "MichalNowakowski6428@gmail.com", "Michal6428"),
+            Patient.Create("Janek", "Kowalski", "JohnDoe@gmail.com", "DoeJohn13")
         };
         patients[0].UpdatePersonalInformation("Michał", "Nowakowski", "664664664", "00081205417");
         await context.Patients.AddRangeAsync(patients);
@@ -60,9 +60,9 @@ public static class DatabaseSeeder
     {
         var officeLocations = new List<OfficeLocation>
         {
-            OfficeLocation.Create("ul. Generała Bema", "15", "Białystok", "15-458", doctors[0]),
-            OfficeLocation.Create("al. Jerozolimskie", "34", "Warszawa", "05-800", doctors[1]),
-            OfficeLocation.Create("ul. Marii Skłodowskiej-Curie", "24A", "Białystok", "15-276", doctors[2])
+            OfficeLocation.Create("ul. Generała Bema 15, 15-458 Białystok", doctors[0]),
+            OfficeLocation.Create("al. Jerozolimskie 34 05-800 Warszawa", doctors[1]),
+            OfficeLocation.Create("ul. Marii Skłodowskiej-Curie 24A, 15-276 Białystok", doctors[2])
         };
         await context.OfficeLocations.AddRangeAsync(officeLocations);
     }
@@ -107,7 +107,7 @@ public static class DatabaseSeeder
         {
             Review.Create(
                 "Doktor Elżbieta Nowak – bardzo profesjonalna i miła Pani doktor, trafna diagnoza," +
-                " przepisane leczenie szybko przyniosło ulgę. Dziękuje!",4, doctors[2], patients[0]),
+                " przepisane leczenie szybko przyniosło ulgę. Dziękuje!", 4, doctors[2], patients[0]),
             Review.Create(
                 "Z czystym sumieniem polecam dr. Konrada. Pełen profesjonalizm, wiedza i siła spokoju " +
                 "i umiejętność wytłumaczenia mi przebiegu choroby, spowodowały, że po 30 minutach rozmowy z p. doktorem " +

@@ -16,6 +16,6 @@ public class DoctorViewModel : IMapFrom<Doctor>
     {
         profile.CreateMap<Doctor, DoctorViewModel>()
             .ForMember(vm => vm.OfficeLocation,
-                opt => opt.MapFrom(d => d.OfficeLocation == null ? null : d.OfficeLocation.GetFullAddress()));
+                opt => opt.MapFrom(d => d.OfficeLocation == null ? null : d.OfficeLocation.Address));
     }
 }

@@ -48,16 +48,13 @@ public class Doctor : User
 
     public void UpdateOfficeLocation(string fullAddress)
     {
-        (string street, string house, string city, string postalCode) =
-            OfficeLocation.FullAddressToSeparateStrings(fullAddress);
-        
         if (OfficeLocation is null)
         {
-            OfficeLocation = OfficeLocation.Create(street, house, city, postalCode, this);
+            OfficeLocation = OfficeLocation.Create(fullAddress, this);
         }
         else
         {
-            OfficeLocation.Update(street, house, city, postalCode);
+            OfficeLocation.Update(fullAddress);
         }
     }
 }

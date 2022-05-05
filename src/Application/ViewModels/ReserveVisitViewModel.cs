@@ -18,7 +18,7 @@ public class ReserveVisitViewModel : IMapFrom<Visit>
         profile.CreateMap<Visit, ReserveVisitViewModel>()
             .ForMember(vm => vm.VisitId, opt => opt.MapFrom(v => v.Id))
             .ForMember(vm => vm.VisitDateTime, opt => opt.MapFrom(v => v.DateTime))
-            .ForMember(vm => vm.Location, opt => opt.MapFrom(v => v.Doctor.OfficeLocation!.GetFullAddress()))
+            .ForMember(vm => vm.Location, opt => opt.MapFrom(v => v.Doctor.OfficeLocation!.Address))
             .ForMember(vm => vm.FullName, opt => opt.MapFrom(v => v.Doctor.GetFullName()))
             .ForMember(vm => vm.MedicalSpecialization, opt => opt.MapFrom(v => v.Doctor.MedicalSpecialization))
             .ForMember(vm => vm.Completed, opt => opt.MapFrom(v => v.IsCompleted));
