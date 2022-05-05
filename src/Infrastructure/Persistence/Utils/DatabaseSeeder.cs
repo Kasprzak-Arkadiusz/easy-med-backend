@@ -1,7 +1,6 @@
 ﻿using EasyMed.Application.Common.Interfaces;
 using EasyMed.Domain.Entities;
 using EasyMed.Domain.Enums;
-using DayOfWeek = EasyMed.Domain.Enums.DayOfWeek;
 
 namespace EasyMed.Infrastructure.Persistence.Utils;
 
@@ -70,23 +69,21 @@ public static class DatabaseSeeder
 
     private static async Task SeedSchedules(IApplicationDbContext context, IReadOnlyList<Doctor> doctors)
     {
-        var schedules = Enum.GetValues<DayOfWeek>().Where(day => day != DayOfWeek.Sunday)
-            .Select(day => Schedule.Create(day, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[2])).ToList();
-
+        var schedules = new List<Schedule>();
         schedules.AddRange(new[]
         {
-            Schedule.Create(DayOfWeek.Monday, new TimeOnly(16, 0, 0), new TimeOnly(19, 30, 0), doctors[1]),
-            Schedule.Create(DayOfWeek.Tuesday, new TimeOnly(12, 0, 0), new TimeOnly(18, 0, 0), doctors[1]),
-            Schedule.Create(DayOfWeek.Thursday, new TimeOnly(12, 0, 0), new TimeOnly(18, 0, 0), doctors[1]),
-            Schedule.Create(DayOfWeek.Saturday, new TimeOnly(14, 0, 0), new TimeOnly(20, 0, 0), doctors[1]),
-            Schedule.Create(DayOfWeek.Sunday, new TimeOnly(9, 30, 0), new TimeOnly(16, 0, 0), doctors[1])
+            Schedule.Create(new DateTime(2022, 4,3,16, 0, 0), new DateTime(2022, 4,3,19, 30, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4,4,12, 0, 0), new DateTime(2022, 4,4,18, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4,5,12, 0, 0), new DateTime(2022, 4,5,18, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4,6,14, 0, 0), new DateTime(2022, 4,6,20, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4,7,9, 30, 0), new DateTime(2022, 4,7,16, 0, 0), doctors[1])
         });
 
         schedules.AddRange(new[]
         {
-            Schedule.Create(DayOfWeek.Tuesday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0]),
-            Schedule.Create(DayOfWeek.Wednesday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0]),
-            Schedule.Create(DayOfWeek.Thursday, new TimeOnly(8, 0, 0), new TimeOnly(16, 0, 0), doctors[0])
+            Schedule.Create(new DateTime(2022, 4,3, 8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0]),
+            Schedule.Create(new DateTime(2022, 4,4,8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0]),
+            Schedule.Create( new DateTime(2022, 4,5,8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0])
         });
         await context.Schedules.AddRangeAsync(schedules);
     }

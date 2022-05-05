@@ -48,8 +48,7 @@ public class GetFreeTermsByDoctorIdQueryHandler : IRequestHandler<GetFreeTermsBy
             .ToListAsync(cancellationToken);
 
         var doctorSchedule = _context.Schedules
-            .FirstOrDefault(s => s.DayOfWeek == request.VisitDate.DayOfWeek.ToString() 
-                                 && s.Doctor.Id == request.DoctorId);
+            .FirstOrDefault(s => s.StartDate.Date == request.VisitDate.Date && s.Doctor.Id == request.DoctorId);
 
         var freeTerms = _freeTermService.CalculateFreeTerms(request.VisitDate, doctorSchedule, visitsToTheDoctor);
 
