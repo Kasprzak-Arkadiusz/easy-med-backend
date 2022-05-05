@@ -5,5 +5,9 @@ namespace EasyMed.Application.Common.Interfaces;
 
 public interface IFreeTermService
 {
-    IEnumerable<FreeTermViewModel> CalculateFreeTerms(DateTime visitDate, Schedule? schedule, IEnumerable<Visit> visits);
+    IEnumerable<FreeTermViewModel>
+        CalculateFreeTerms(DateTime visitDate, Schedule? schedule, List<Visit> visits);
+
+    IEnumerable<DaysWithFreeTermViewModel> GetDaysWithFreeTerm(int daysAhead, List<Schedule> schedules,
+        List<Visit> visits);
 }

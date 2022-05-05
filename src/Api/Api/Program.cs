@@ -60,15 +60,21 @@ builder.Services.AddAuthentication(option =>
 
 
 builder.Services
-    .AddControllers()
+    .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
     .AddJsonOptions(x =>
     {
         x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        x.UseDateOnlyTimeOnlyStringConverters();
     })
     .AddFluentValidation();
 
 builder.Services.AddSwaggerDocumentation();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+    options.UseDateOnlyTimeOnlyStringConverters();
+});
 
 WebApplication app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

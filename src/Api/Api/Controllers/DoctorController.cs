@@ -52,13 +52,30 @@ public class DoctorController : BaseController
     {
         try
         {
-            var doctors = await Mediator.Send(new GetFreeTermsByDoctorIdQuery(doctorId, visitDateTime));
-            return Ok(doctors);
+            var freeTerms = await Mediator.Send(new GetFreeTermsByDoctorIdQuery(doctorId, visitDateTime));
+            return Ok(freeTerms);
         }
         catch (Exception e)
         {
             return BadRequest(e.Message);
         }
+    }
+
+    /// <summary>
+    /// Get days with a free term for a specific doctor
+    /// </summary>
+    /// <param name="doctorId">Doctor id</param>
+    /// <returns>Days with free term for a specific doctor</returns>
+    /// <response code="200">Successfully returned days with free term</response>
+    /// <response code="404">Doctor not found</response>
+    [Authorize]
+    [HttpGet("daysWithFreeTerm")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<IEnumerable<DaysWithFreeTermViewModel>>> GetDaysWithFreeTerm(int doctorId)
+    {
+        var freeTerms = await Mediator.Send(new GetDaysWithFreeTermQuery(doctorId));
+        return Ok(freeTerms);
     }
 
     /// <summary>
@@ -104,8 +121,8 @@ public class DoctorController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdateDoctorInformation([FromBody] UpdateDoctorInformationDto dto)
     {
-        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), dto.FirstName, dto.LastName,
-            dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
+        var viewModel = await Mediator.Send(new UpdateDoctorInformationCommand(RequireUserId(), dto.FirstName,
+            dto.LastName, dto.Email, dto.Telephone, dto.Description, dto.OfficeLocation, dto.MedicalSpecialization));
 
         return Ok(viewModel);
     }
