@@ -222,7 +222,6 @@ public class DoctorController : BaseController
     /// <summary>
     /// Create prescription
     /// </summary>
-    /// <param name="id">Doctor id</param>
     /// <param name="createPrescriptionDto">Patient Id and list of medicines</param>
     /// <response code="200">Successfully returned prescriptions</response>
     /// <response code="400">Validation or logic error</response>
@@ -241,7 +240,7 @@ public class DoctorController : BaseController
             .Select(m => new CreateMedicineViewModel(m.Name, m.Capacity)).ToList();
 
         var prescriptions =
-            await Mediator.Send(new CreatePrescriptionCommand(currentUserId, id, createPrescriptionDto.PatientId,
+            await Mediator.Send(new CreatePrescriptionCommand(currentUserId, createPrescriptionDto.PatientId,
                 DateOnly.FromDateTime(DateTimeProvider.Now), medicineViewModelList));
         return Ok(prescriptions);
     }

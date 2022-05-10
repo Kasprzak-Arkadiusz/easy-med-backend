@@ -12,16 +12,14 @@ namespace EasyMed.Application.Commands;
 public class CreatePrescriptionCommand : IRequest<DoctorPrescriptionViewModel>
 {
     public int CurrentUserId { get; }
-    public int Id { get; }
     public int PatientId { get; }
     public DateOnly DateOfIssue { get; }
     public IEnumerable<CreateMedicineViewModel> Medicines { get; }
 
-    public CreatePrescriptionCommand(int currentUserId, int id, int patientId, DateOnly dateOfIssue,
+    public CreatePrescriptionCommand(int currentUserId, int patientId, DateOnly dateOfIssue,
         IEnumerable<CreateMedicineViewModel> medicines)
     {
         CurrentUserId = currentUserId;
-        Id = id;
         PatientId = patientId;
         DateOfIssue = dateOfIssue;
         Medicines = medicines;
@@ -50,8 +48,7 @@ public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescripti
             throw new ForbiddenAccessException("You need to be a doctor to do that");
         }
 
-        AuthorizationService.VerifyIfSameUser(command.Id, command.CurrentUserId,
-            "You cannot create prescription not for your patient");
+        await CheckIfDoctorHadVisitWithPatient(currentUser.Id, command.PatientId);
 
         var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == command.PatientId, cancellationToken);
 
@@ -71,5 +68,17 @@ public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescripti
         var viewModel = _mapper.Map<DoctorPrescriptionViewModel>(prescription);
 
         return viewModel;
+    }
+
+    public async Task CheckIfDoctorHadVisitWithPatient(int doctorId, int patientId)
+    {
+        var hadVisit =
+            await _context.Visits.AnyAsync(v => v.DoctorId == doctorId && v.PatientId == patientId && v.IsCompleted);
+
+        if (!hadVisit)
+        {
+            throw new BadRequestException(
+                "A prescription can only be issued to patients with whom you have had an appointment");
+        }
     }
 }
