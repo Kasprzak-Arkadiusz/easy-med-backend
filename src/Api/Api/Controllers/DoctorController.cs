@@ -166,7 +166,7 @@ public class DoctorController : BaseController
         );
         return Ok(reviews);
     }
-    
+
     /// <summary>
     /// Get doctor schedule
     /// </summary>
@@ -180,7 +180,7 @@ public class DoctorController : BaseController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> GetDoctorSchedule(int id)
     {
-        var schedules = await Mediator.Send(new GetDoctorScheduleQuery(id));
+        var schedules = await Mediator.Send(new GetDoctorScheduleQuery(RequireUserId(), id));
         return Ok(schedules);
     }
 
