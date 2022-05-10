@@ -166,7 +166,7 @@ public class DoctorController : BaseController
         );
         return Ok(reviews);
     }
-    
+
     /// <summary>
     /// Get doctor schedule
     /// </summary>
@@ -201,7 +201,7 @@ public class DoctorController : BaseController
         var visits = await Mediator.Send(new GetVisitsByDoctorIdQuery(id, isCompleted));
         return Ok(visits);
     }
-    
+
     /// <summary>
     /// Get prescriptions
     /// </summary>
@@ -216,6 +216,29 @@ public class DoctorController : BaseController
     public async Task<ActionResult> GetPrescriptions(int id)
     {
         var prescriptions = await Mediator.Send(new GetPrescriptionsByDoctorIdQuery(id));
+        return Ok(prescriptions);
+    }
+
+    /// <summary>
+    /// Create prescriptions
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <param name="createPrescriptionDto">Patient Id and list of medicines</param>
+    /// <response code="200">Successfully returned prescriptions</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    /// <response code="404">Doctor not found</response>
+    [HttpPost("{id:int}/prescriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> CreatePrescription(int id, [FromBody] CreatePrescriptionDto createPrescriptionDto)
+    {
+        var currentUserId = RequireUserId();
+        var prescriptions =
+            await Mediator.Send(new CreatePrescriptionCommand(currentUserId, id, createPrescriptionDto.PatientId,
+                DateOnly.FromDateTime(DateTimeProvider.Now), createPrescriptionDto.Medicines));
         return Ok(prescriptions);
     }
 }
