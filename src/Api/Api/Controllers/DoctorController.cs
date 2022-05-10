@@ -220,7 +220,7 @@ public class DoctorController : BaseController
     }
 
     /// <summary>
-    /// Create prescriptions
+    /// Create prescription
     /// </summary>
     /// <param name="id">Doctor id</param>
     /// <param name="createPrescriptionDto">Patient Id and list of medicines</param>
@@ -228,6 +228,7 @@ public class DoctorController : BaseController
     /// <response code="400">Validation or logic error</response>
     /// <response code="403">Unauthorized</response>
     /// <response code="404">Doctor not found</response>
+    /// <returns>Created prescription</returns>
     [HttpPost("{id:int}/prescriptions")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -236,9 +237,12 @@ public class DoctorController : BaseController
     public async Task<ActionResult> CreatePrescription(int id, [FromBody] CreatePrescriptionDto createPrescriptionDto)
     {
         var currentUserId = RequireUserId();
+        var medicineViewModelList = createPrescriptionDto.Medicines
+            .Select(m => new CreateMedicineViewModel(m.Name, m.Capacity)).ToList();
+
         var prescriptions =
             await Mediator.Send(new CreatePrescriptionCommand(currentUserId, id, createPrescriptionDto.PatientId,
-                DateOnly.FromDateTime(DateTimeProvider.Now), createPrescriptionDto.Medicines));
+                DateOnly.FromDateTime(DateTimeProvider.Now), medicineViewModelList));
         return Ok(prescriptions);
     }
 }
