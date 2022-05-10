@@ -40,15 +40,14 @@ public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescripti
     public async Task<DoctorPrescriptionViewModel> Handle(CreatePrescriptionCommand command,
         CancellationToken cancellationToken)
     {
-        var currentUser =
-            await _context.Doctors.FirstOrDefaultAsync(d => d.Id == command.CurrentUserId, cancellationToken);
+        var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == command.CurrentUserId, cancellationToken);
 
-        if (currentUser == default)
+        if (doctor == default)
         {
             throw new ForbiddenAccessException("You need to be a doctor to do that");
         }
 
-        await CheckIfDoctorHadVisitWithPatient(currentUser.Id, command.PatientId);
+        await CheckIfDoctorHadVisitWithPatient(doctor.Id, command.PatientId);
 
         var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == command.PatientId, cancellationToken);
 
@@ -57,10 +56,9 @@ public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescripti
             throw new NotFoundException("Patient not found");
         }
 
-        var medicines = command.Medicines.Select(medicine => Medicine.Create(medicine.Name, medicine.Capacity))
-            .ToList();
+        var medicines = command.Medicines.Select(m => Medicine.Create(m.Name, m.Capacity)).ToList();
 
-        var prescription = Prescription.Create(command.DateOfIssue, currentUser, patient, medicines);
+        var prescription = Prescription.Create(command.DateOfIssue, doctor, patient, medicines);
 
         await _context.Prescriptions.AddAsync(prescription, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
@@ -70,7 +68,7 @@ public class CreatePrescriptionCommandHandler : IRequestHandler<CreatePrescripti
         return viewModel;
     }
 
-    public async Task CheckIfDoctorHadVisitWithPatient(int doctorId, int patientId)
+    private async Task CheckIfDoctorHadVisitWithPatient(int doctorId, int patientId)
     {
         var hadVisit =
             await _context.Visits.AnyAsync(v => v.DoctorId == doctorId && v.PatientId == patientId && v.IsCompleted);

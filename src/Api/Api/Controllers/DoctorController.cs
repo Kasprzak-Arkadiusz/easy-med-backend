@@ -223,7 +223,7 @@ public class DoctorController : BaseController
     /// Create prescription
     /// </summary>
     /// <param name="createPrescriptionDto">Patient Id and list of medicines</param>
-    /// <response code="200">Successfully returned prescriptions</response>
+    /// <response code="200">Successfully created prescription</response>
     /// <response code="400">Validation or logic error</response>
     /// <response code="403">Unauthorized</response>
     /// <response code="404">Doctor not found</response>

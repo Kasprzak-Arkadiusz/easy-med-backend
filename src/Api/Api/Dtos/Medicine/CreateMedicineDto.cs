@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using Api.Dtos.Validators;
+using FluentValidation;
 
 namespace Api.Dtos.Medicine;
 
@@ -6,8 +7,12 @@ public class CreateMedicineDtoValidator : AbstractValidator<CreateMedicineDto>
 {
     public CreateMedicineDtoValidator()
     {
-        RuleFor(dto => dto.Name).NotEmpty();
-        RuleFor(dto => dto.Capacity).NotEmpty();
+        RuleFor(dto => dto.Name).NotEmpty()
+            .MaximumLength(ValidationConstants.MaxMedicineNameLength)
+            .WithMessage("Must contain max " + ValidationConstants.MaxMedicineNameLength + " characters");
+        RuleFor(dto => dto.Capacity).NotEmpty()
+            .MaximumLength(ValidationConstants.MaxMedicineCapacityLength)
+            .WithMessage("Must contain max " + ValidationConstants.MaxMedicineCapacityLength + " characters");
     }
 }
 
