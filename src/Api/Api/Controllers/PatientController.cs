@@ -26,7 +26,7 @@ public class PatientController : BaseController
         var reviews = await Mediator.Send(new GetReviewsByPatientIdQuery(RequireUserId(), id));
         return Ok(reviews);
     }
-    
+
     /// <summary>
     /// Get patient information
     /// </summary>
@@ -56,12 +56,12 @@ public class PatientController : BaseController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> UpdatePatientInformation([FromBody] UpdatePatientInformationDto dto)
     {
-        var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), dto.FirstName, dto.LastName,
-            dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
+        var viewModel = await Mediator.Send(new UpdatePatientInformationCommand(RequireUserId(), dto.FirstName,
+            dto.LastName, dto.Email, dto.Telephone, dto.PersonalIdentityNumber));
 
         return Ok(viewModel);
     }
-    
+
     /// <summary>
     /// Get prescriptions created for patient
     /// </summary>
@@ -78,7 +78,7 @@ public class PatientController : BaseController
         var prescriptions = await Mediator.Send(new GetPrescriptionsByPatientIdQuery(RequireUserId(), id));
         return Ok(prescriptions);
     }
-    
+
     /// <summary>
     /// Get patient visits
     /// </summary>
@@ -95,5 +95,21 @@ public class PatientController : BaseController
     {
         var visits = await Mediator.Send(new GetVisitsByPatientIdQuery(id, isCompleted));
         return Ok(visits);
+    }
+
+    /// <summary>
+    /// Get patients who can get a prescription
+    /// </summary>
+    /// <response code="200">Successfully returned patients</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> GetPrescriptionPatients()
+    {
+        var patients = await Mediator.Send(new GetPrescriptionPatientsQuery(RequireUserId()));
+        return Ok(patients);
     }
 }
