@@ -14,4 +14,6 @@ public static class ValidationConstants
     public const int MinDescriptionLength = 6;
     public const int MaxDescriptionLength = 400;
     public const int ExactPersonalIdentityNumberLength = 11;
+    public const int MaxMedicineNameLength = 50;
+    public const int MaxMedicineCapacityLength = 40;
 }

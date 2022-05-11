@@ -1,5 +1,7 @@
 using System.Security.Claims;
 using EasyMed.Application.Common.Exceptions;
+using EasyMed.Application.Common.Interfaces;
+using EasyMed.Infrastructure.Services;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +18,8 @@ public class BaseController : ControllerBase
 {
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+    private IDateTime? _dateTimeProvider;
+    protected IDateTime DateTimeProvider => _dateTimeProvider ??= new DateTimeService();
 
     protected int RequireUserId()
     {

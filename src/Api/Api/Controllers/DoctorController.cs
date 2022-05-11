@@ -201,4 +201,47 @@ public class DoctorController : BaseController
         var visits = await Mediator.Send(new GetVisitsByDoctorIdQuery(id, isCompleted));
         return Ok(visits);
     }
+
+    /// <summary>
+    /// Get prescriptions
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned prescriptions</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Doctor not found</response>
+    [HttpGet("{id:int}/prescriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> GetPrescriptions(int id)
+    {
+        var prescriptions = await Mediator.Send(new GetPrescriptionsByDoctorIdQuery(id));
+        return Ok(prescriptions);
+    }
+
+    /// <summary>
+    /// Create prescription
+    /// </summary>
+    /// <param name="createPrescriptionDto">Patient Id and list of medicines</param>
+    /// <response code="200">Successfully created prescription</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    /// <response code="404">Doctor not found</response>
+    /// <returns>Created prescription</returns>
+    [HttpPost("{id:int}/prescriptions")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> CreatePrescription(int id, [FromBody] CreatePrescriptionDto createPrescriptionDto)
+    {
+        var currentUserId = RequireUserId();
+        var medicineViewModelList = createPrescriptionDto.Medicines
+            .Select(m => new CreateMedicineViewModel(m.Name, m.Capacity)).ToList();
+
+        var prescriptions =
+            await Mediator.Send(new CreatePrescriptionCommand(currentUserId, createPrescriptionDto.PatientId,
+                DateOnly.FromDateTime(DateTimeProvider.Now), medicineViewModelList));
+        return Ok(prescriptions);
+    }
 }
