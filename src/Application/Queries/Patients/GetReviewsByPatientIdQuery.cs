@@ -50,6 +50,7 @@ public class GetReviewsByPatientIdQueryValidator
             .OrderByDescending(r => r.CreatedAt)
             .Include(r => r.Patient)
             .Include(r => r.Doctor)
+            .ThenInclude(d => d.OfficeLocation)
             .Select(r => _mapper.Map<ReviewViewModel>(r))
             .ToListAsync(cancellationToken);
 
