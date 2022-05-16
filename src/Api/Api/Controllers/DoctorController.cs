@@ -1,6 +1,7 @@
 ﻿using Api.Dtos.Doctor;
 using EasyMed.Application.Commands;
 using EasyMed.Application.Queries.Doctors;
+using EasyMed.Application.Queries.Patients;
 using EasyMed.Application.ViewModels;
 using EasyMed.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -243,5 +244,22 @@ public class DoctorController : BaseController
             await Mediator.Send(new CreatePrescriptionCommand(currentUserId, createPrescriptionDto.PatientId,
                 DateOnly.FromDateTime(DateTimeProvider.Now), medicineViewModelList));
         return Ok(prescriptions);
+    }
+
+    /// <summary>
+    /// Get patients who can get a prescription
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned patients</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    [HttpGet("{id:int}/prescriptions/available-patients")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> GetPrescriptionPatients(int id)
+    {
+        var patients = await Mediator.Send(new GetPrescriptionPatientsQuery(RequireUserId(), id));
+        return Ok(patients);
     }
 }
