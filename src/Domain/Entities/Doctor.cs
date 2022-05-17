@@ -21,7 +21,11 @@ public class Doctor : User
             LastName = lastName,
             EmailAddress = emailAddress,
             PasswordHash = HashPassword(password),
-            Role = Role.Doctor
+            Role = Role.Doctor,
+            Prescriptions = new List<Prescription>(),
+            Reviews = new List<Review>(),
+            Schedules = new List<Schedule>(),
+            Visits = new List<Visit>()
         };
     }
 
