@@ -41,6 +41,7 @@ public static class DatabaseSeeder
 
         var specificDoctors = await context.Doctors.Where(d => doctorEmails.Contains(d.EmailAddress)).ToListAsync();
         await SeedSchedules(context, specificDoctors);
+        await context.SaveChangesAsync();
     }
 
     private static async Task<List<Doctor>> SeedDoctors(IApplicationDbContext applicationDbContext)
