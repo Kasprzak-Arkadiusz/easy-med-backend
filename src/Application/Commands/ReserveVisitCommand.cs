@@ -56,7 +56,11 @@ public class ReserveVisitCommandHandler : IRequestHandler<ReserveVisitCommand, R
         }
 
         var sameVisitExists = _context.Visits.Any(v =>
-            v.DateTime == request.VisitDateTime &&
+            ((v.DateTime < request.VisitDateTime.AddMinutes(Visit.GetVisitTimeInMinutes()) &&
+              v.DateTime >= request.VisitDateTime)
+             ||
+             (v.DateTime.AddMinutes(Visit.GetVisitTimeInMinutes()) > request.VisitDateTime &&
+              v.DateTime <= request.VisitDateTime)) &&
             v.DoctorId == request.DoctorId);
 
         if (sameVisitExists)
