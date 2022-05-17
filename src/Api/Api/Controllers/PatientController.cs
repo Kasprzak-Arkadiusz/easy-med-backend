@@ -1,7 +1,7 @@
 ﻿using Api.Dtos.Patient;
 using EasyMed.Application.Commands;
+using EasyMed.Application.Queries.Doctors;
 using EasyMed.Application.Queries.Patients;
-using EasyMed.Application.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +25,23 @@ public class PatientController : BaseController
     {
         var reviews = await Mediator.Send(new GetReviewsByPatientIdQuery(RequireUserId(), id));
         return Ok(reviews);
+    }
+    
+    /// <summary>
+    /// Get doctors available for reviews
+    /// </summary>
+    /// <param name="id">Patient id</param>
+    /// <response code="200">Successfully returned doctors</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    [HttpGet("{id:int}/reviews/available-doctors")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> GetDoctorsForReview(int id)
+    {
+        var doctors = await Mediator.Send(new GetDoctorsForReviewQuery(RequireUserId(), id));
+        return Ok(doctors);
     }
 
     /// <summary>
