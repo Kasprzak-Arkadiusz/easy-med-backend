@@ -34,14 +34,15 @@ public class Doctor : User
     {
         var earliestScheduleDate = weekSchedules.OrderBy(s => s.StartDate).First().StartDate;
         int numberOfWeeksInThisPeriod = daysAhead / 7;
+        var entireSchedule = new List<Schedule>();
 
         foreach (var schedule in weekSchedules)
         {
-            Schedules.Add(schedule);
+            entireSchedule.Add(schedule);
 
             for (int i = 1; i < numberOfWeeksInThisPeriod; i++)
             {
-                Schedules.Add(Schedule.Create(schedule.StartDate.AddDays(i * 7),
+                entireSchedule.Add(Schedule.Create(schedule.StartDate.AddDays(i * 7),
                     schedule.EndDate.AddDays(i * 7), this));
             }
 
@@ -50,10 +51,12 @@ public class Doctor : User
 
             if (scheduleLastDay <= lastDay)
             {
-                Schedules.Add(Schedule.Create(scheduleLastDay, 
+                entireSchedule.Add(Schedule.Create(scheduleLastDay, 
                     schedule.EndDate.AddDays(numberOfWeeksInThisPeriod * 7), this));
             }
         }
+
+        Schedules = entireSchedule; 
     }
 
     public void UpdatePersonalInformation(string firstName, string lastName, string telephoneNumber,
