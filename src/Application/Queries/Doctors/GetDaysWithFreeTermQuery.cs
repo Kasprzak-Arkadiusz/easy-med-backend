@@ -38,14 +38,19 @@ public class GetDaysWithFreeTermQueryHandler
         }
 
         var maxDayAhead = DateTime.Today.AddDays(GetDaysWithFreeTermQuery.DaysAhead);
+        var today = DateTime.Today;
         var visitsToTheDoctor = await _context.Visits
             .Where(v => v.DoctorId == query.DoctorId &&
-                        v.DateTime.Date > DateTime.Today &&
+                        v.DateTime.Date > today.Date &&
                         v.DateTime.Date <= maxDayAhead)
+            .OrderBy(v => v.DateTime)
             .ToListAsync(cancellationToken);
 
         var doctorSchedule = await _context.Schedules
-            .Where(s => s.Doctor.Id == query.DoctorId)
+            .Where(s => s.Doctor.Id == query.DoctorId &&
+                        s.StartDate.Date > today.Date &&
+                        s.StartDate.Date <= maxDayAhead)
+            .OrderBy(s => s.StartDate)
             .ToListAsync(cancellationToken);
 
         var viewModels = _freeTermService
