@@ -10,6 +10,8 @@ public class Schedule : IEntity
     public Doctor Doctor { get; private set; }
     public int DoctorId { get; private set; }
 
+    public const int DaysPlannedAhead = 90;
+
     public static Schedule Create(DateTime startDate, DateTime endDate, Doctor doctor)
     {
         return new Schedule

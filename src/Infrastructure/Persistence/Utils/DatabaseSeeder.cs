@@ -70,21 +70,29 @@ public static class DatabaseSeeder
     private static async Task SeedSchedules(IApplicationDbContext context, IReadOnlyList<Doctor> doctors)
     {
         var schedules = new List<Schedule>();
-        schedules.AddRange(new[]
-        {
-            Schedule.Create(new DateTime(2022, 4,3,16, 0, 0), new DateTime(2022, 4,3,19, 30, 0), doctors[1]),
-            Schedule.Create(new DateTime(2022, 4,4,12, 0, 0), new DateTime(2022, 4,4,18, 0, 0), doctors[1]),
-            Schedule.Create(new DateTime(2022, 4,5,12, 0, 0), new DateTime(2022, 4,5,18, 0, 0), doctors[1]),
-            Schedule.Create(new DateTime(2022, 4,6,14, 0, 0), new DateTime(2022, 4,6,20, 0, 0), doctors[1]),
-            Schedule.Create(new DateTime(2022, 4,7,9, 30, 0), new DateTime(2022, 4,7,16, 0, 0), doctors[1])
-        });
 
-        schedules.AddRange(new[]
+        var firstDoctorSchedule = new[]
         {
-            Schedule.Create(new DateTime(2022, 4,3, 8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0]),
-            Schedule.Create(new DateTime(2022, 4,4,8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0]),
-            Schedule.Create( new DateTime(2022, 4,5,8, 0, 0), new DateTime(2022, 4,3,16, 0, 0), doctors[0])
-        });
+            Schedule.Create(new DateTime(2022, 4, 3, 16, 0, 0), new DateTime(2022, 4, 3, 19, 30, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4, 4, 12, 0, 0), new DateTime(2022, 4, 4, 18, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4, 5, 12, 0, 0), new DateTime(2022, 4, 5, 18, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4, 6, 14, 0, 0), new DateTime(2022, 4, 6, 20, 0, 0), doctors[1]),
+            Schedule.Create(new DateTime(2022, 4, 7, 9, 30, 0), new DateTime(2022, 4, 7, 16, 0, 0), doctors[1])
+        };
+
+        doctors[0].FillEntireScheduleByWeekSchedule(firstDoctorSchedule);
+        schedules.AddRange(schedules);
+
+        var secondDoctorSchedule = new[]
+        {
+            Schedule.Create(new DateTime(2022, 4, 3, 8, 0, 0), new DateTime(2022, 4, 3, 16, 0, 0), doctors[0]),
+            Schedule.Create(new DateTime(2022, 4, 4, 8, 0, 0), new DateTime(2022, 4, 4, 16, 0, 0), doctors[0]),
+            Schedule.Create(new DateTime(2022, 4, 5, 8, 0, 0), new DateTime(2022, 4, 5, 16, 0, 0), doctors[0])
+        };
+
+        doctors[1].FillEntireScheduleByWeekSchedule(secondDoctorSchedule);
+        schedules.AddRange(secondDoctorSchedule);
+        
         await context.Schedules.AddRangeAsync(schedules);
     }
 
