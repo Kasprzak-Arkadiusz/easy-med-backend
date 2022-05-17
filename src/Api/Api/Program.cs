@@ -97,6 +97,13 @@ if (app.Environment.IsDevelopment())
     await DatabaseSeeder.Seed(dataContext);
 }
 
+// Temporary Solution TODO Remove in next commit
+{
+    using var scope = app.Services.CreateScope();
+    var dataContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await DatabaseSeeder.SeedMissingSchedules(dataContext);
+}
+
 var port = Environment.GetEnvironmentVariable("PORT");
 if (port != null)
 {

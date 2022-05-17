@@ -1,6 +1,7 @@
 ﻿using EasyMed.Application.Common.Interfaces;
 using EasyMed.Domain.Entities;
 using EasyMed.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Infrastructure.Persistence.Utils;
 
@@ -24,6 +25,22 @@ public static class DatabaseSeeder
 
         await SeedPrescriptions(context, doctors, patients, medicines);
         await context.SaveChangesAsync();
+    }
+
+    public async static Task SeedMissingSchedules(IApplicationDbContext context)
+    {
+        if (context.Schedules.Any())
+        {
+            return;
+        }
+        
+        var doctorEmails = new List<string>
+        {
+            "bestDoctor@gmail.com", "drKonradZabrzecki123@onet.pl", "ElzbietaNowakDr44@wp.pl"
+        };
+
+        var specificDoctors = await context.Doctors.Where(d => doctorEmails.Contains(d.EmailAddress)).ToListAsync();
+        await SeedSchedules(context, specificDoctors);
     }
 
     private static async Task<List<Doctor>> SeedDoctors(IApplicationDbContext applicationDbContext)
@@ -92,7 +109,7 @@ public static class DatabaseSeeder
 
         doctors[1].FillEntireScheduleByWeekSchedule(secondDoctorSchedule);
         schedules.AddRange(secondDoctorSchedule);
-        
+
         await context.Schedules.AddRangeAsync(schedules);
     }
 
