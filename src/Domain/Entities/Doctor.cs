@@ -21,15 +21,49 @@ public class Doctor : User
             LastName = lastName,
             EmailAddress = emailAddress,
             PasswordHash = HashPassword(password),
-            Role = Role.Doctor
+            Role = Role.Doctor,
+            Prescriptions = new List<Prescription>(),
+            Reviews = new List<Review>(),
+            Schedules = new List<Schedule>(),
+            Visits = new List<Visit>()
         };
+    }
+
+    public void FillEntireScheduleByWeekSchedule(IReadOnlyCollection<Schedule> weekSchedules,
+        int daysAhead = Schedule.DaysPlannedAhead)
+    {
+        var earliestScheduleDate = weekSchedules.OrderBy(s => s.StartDate).First().StartDate;
+        int numberOfWeeksInThisPeriod = daysAhead / 7;
+        var entireSchedule = new List<Schedule>();
+
+        foreach (var schedule in weekSchedules)
+        {
+            entireSchedule.Add(schedule);
+
+            for (int i = 1; i < numberOfWeeksInThisPeriod; i++)
+            {
+                entireSchedule.Add(Schedule.Create(schedule.StartDate.AddDays(i * 7),
+                    schedule.EndDate.AddDays(i * 7), this));
+            }
+
+            var lastDay = earliestScheduleDate.AddDays(Schedule.DaysPlannedAhead);
+            var scheduleLastDay = schedule.StartDate.AddDays(numberOfWeeksInThisPeriod * 7);
+
+            if (scheduleLastDay <= lastDay)
+            {
+                entireSchedule.Add(Schedule.Create(scheduleLastDay, 
+                    schedule.EndDate.AddDays(numberOfWeeksInThisPeriod * 7), this));
+            }
+        }
+
+        Schedules = entireSchedule; 
     }
 
     public void UpdatePersonalInformation(string firstName, string lastName, string telephoneNumber,
         string description, string? emailAddress = null)
     {
         base.UpdatePersonalInformation(firstName, lastName, emailAddress, telephoneNumber);
-        
+
         if (!string.IsNullOrEmpty(description) && Description != description)
         {
             Description = description;

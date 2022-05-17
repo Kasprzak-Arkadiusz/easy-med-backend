@@ -52,8 +52,7 @@ public class FreeTermService : IFreeTermService
         for (int i = 1; i <= daysAhead; i++)
         {
             var thatDay = today.AddDays(i);
-            var scheduleThatDay = schedules
-                    .FirstOrDefault(s => s.StartDate.DayOfWeek == thatDay.DayOfWeek);
+            var scheduleThatDay = schedules.FirstOrDefault(s => s.StartDate.Date == thatDay.Date);
 
             if (scheduleThatDay == default)
             {
