@@ -202,7 +202,26 @@ public class DoctorController : BaseController
         var visits = await Mediator.Send(new GetVisitsByDoctorIdQuery(id, isCompleted));
         return Ok(visits);
     }
-
+    
+    /// <summary>
+    /// Complete a visit
+    /// </summary>
+    /// <param name="visitId">Visit id</param>
+    /// <response code="200">Successfully completed visit</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    /// <response code="404">Visit not found</response>
+    [HttpPatch("visit/{visitId:int}/complete")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> CompleteVisit(int visitId)
+    {
+        await Mediator.Send(new CompleteVisitCommand(RequireUserId(), visitId));
+        return Ok();
+    }
+    
     /// <summary>
     /// Get prescriptions
     /// </summary>
