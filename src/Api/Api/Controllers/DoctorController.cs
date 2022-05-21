@@ -186,6 +186,28 @@ public class DoctorController : BaseController
     }
 
     /// <summary>
+    /// Add availability to schedule
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <param name="requestBody">Request body</param>
+    /// <response code="200">Successfully created review</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="404">Doctor or patient not found</response>
+    [Authorize]
+    [HttpPost("{id:int}/schedule")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult> AddAvailabilityToSchedule(int id, [FromBody] AddAvailabilityDto requestBody)
+    {
+        var currentUserId = RequireUserId();
+        var schedules = await Mediator.Send(
+            new AddAvailabilityToScheduleCommand(requestBody.StartDate, requestBody.EndDate, id, currentUserId)
+        );
+        return Ok(schedules);
+    }
+
+    /// <summary>
     /// Get visits
     /// </summary>
     /// <param name="id">Doctor id</param>
@@ -202,7 +224,7 @@ public class DoctorController : BaseController
         var visits = await Mediator.Send(new GetVisitsByDoctorIdQuery(id, isCompleted));
         return Ok(visits);
     }
-    
+
     /// <summary>
     /// Complete a visit
     /// </summary>
@@ -221,7 +243,7 @@ public class DoctorController : BaseController
         await Mediator.Send(new CompleteVisitCommand(RequireUserId(), visitId));
         return Ok();
     }
-    
+
     /// <summary>
     /// Get prescriptions
     /// </summary>
