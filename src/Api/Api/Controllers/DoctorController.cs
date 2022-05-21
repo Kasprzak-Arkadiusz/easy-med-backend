@@ -303,4 +303,21 @@ public class DoctorController : BaseController
         var patients = await Mediator.Send(new GetPrescriptionPatientsQuery(RequireUserId(), id));
         return Ok(patients);
     }
+
+    /// <summary>
+    /// Get daily info
+    /// </summary>
+    /// <param name="id">Doctor id</param>
+    /// <response code="200">Successfully returned daily info</response>
+    /// <response code="400">Validation or logic error</response>
+    /// <response code="403">Unauthorized</response>
+    [HttpGet("{id:int}/daily-info")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult> GetDailyInfo(int id)
+    {
+        var dailyInfo = await Mediator.Send(new GetDailyInfoByDoctorIdQuery(RequireUserId(), id));
+        return Ok(dailyInfo);
+    }
 }
