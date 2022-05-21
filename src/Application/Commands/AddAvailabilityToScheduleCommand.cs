@@ -9,17 +9,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EasyMed.Application.Commands;
 
+public class Availability
+{
+    public DateTime StartDate { get; set; }
+    public DateTime EndDate { get; set; }
+}
+
 public class AddAvailabilityToScheduleCommand : IRequest<IEnumerable<ScheduleViewModel>>
 {
-    public DateTime StartDate { get; }
-    public DateTime EndDate { get; }
+    public IEnumerable<Availability> Availablities { get; }
     public int DoctorId { get; }
     public int CurrentUserId { get; }
-
-    public AddAvailabilityToScheduleCommand(DateTime startDate, DateTime endDate, int doctorId, int currentUserId)
+    public AddAvailabilityToScheduleCommand(IEnumerable<Availability> availablities, int doctorId, int currentUserId)
     {
-        StartDate = startDate;
-        EndDate = endDate;
+        Availablities = availablities;
         DoctorId = doctorId;
         CurrentUserId = currentUserId;
     }
@@ -49,29 +52,34 @@ public class AddAvailabilityToScheduleCommandHandler : IRequestHandler<AddAvaila
         AuthorizationService.VerifyIfSameUser(query.DoctorId, query.CurrentUserId,
             "You can update only your schedule");
 
-        if (query.StartDate < DateTime.Now || query.EndDate < DateTime.Now)
+        await using var transaction = await ((DbContext)_context).Database.BeginTransactionAsync(cancellationToken);
+        foreach (Availability availability in query.Availablities)
         {
-            throw new BadRequestException("Both start date and end date must be in the future");
+            if (availability.StartDate < DateTime.Now || availability.EndDate < DateTime.Now)
+            {
+                throw new BadRequestException("Both start date and end date must be in the future");
+            }
+
+            if (availability.StartDate >= availability.EndDate)
+            {
+                throw new BadRequestException("End date must be after start date");
+            }
+
+            var doesOverlapped = await _context.Schedules
+                .AnyAsync(s => availability.StartDate < s.EndDate && s.StartDate < availability.EndDate,
+                    cancellationToken);
+
+            if (doesOverlapped)
+            {
+                throw new BadRequestException("Some availabilities in schedule overlapped");
+            }
+
+            var schedule = Schedule.Create(availability.StartDate, availability.EndDate, doctor);
+            await _context.Schedules.AddAsync(schedule, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
         }
 
-        if (query.StartDate >= query.EndDate)
-        {
-            throw new BadRequestException("End date must be after start date");
-        }
-
-        var doesOverlapped = await _context.Schedules
-            .AnyAsync(s => query.StartDate < s.EndDate && s.StartDate < query.EndDate,
-                cancellationToken);
-
-        if (doesOverlapped)
-        {
-            throw new BadRequestException("Some availabilities in schedule overlapped");
-        }
-
-        var schedule = Schedule.Create(query.StartDate, query.EndDate, doctor);
-        await _context.Schedules.AddAsync(schedule, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
-
+        await transaction.CommitAsync(cancellationToken);
         var schedules = await _context.Schedules
             .Where(s => s.Doctor.Id == query.DoctorId)
             .OrderByDescending(s => s.StartDate)

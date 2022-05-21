@@ -186,7 +186,7 @@ public class DoctorController : BaseController
     }
 
     /// <summary>
-    /// Add availability to schedule
+    /// Add availabilities to schedule
     /// </summary>
     /// <param name="id">Doctor id</param>
     /// <param name="requestBody">Request body</param>
@@ -198,11 +198,11 @@ public class DoctorController : BaseController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult> AddAvailabilityToSchedule(int id, [FromBody] AddAvailabilityDto requestBody)
+    public async Task<ActionResult> AddAvailabilitiesToSchedule(int id, [FromBody] AddAvailabilitiesDto requestBody)
     {
         var currentUserId = RequireUserId();
         var schedules = await Mediator.Send(
-            new AddAvailabilityToScheduleCommand(requestBody.StartDate, requestBody.EndDate, id, currentUserId)
+            new AddAvailabilityToScheduleCommand(requestBody.Availablities, id, currentUserId)
         );
         return Ok(schedules);
     }
