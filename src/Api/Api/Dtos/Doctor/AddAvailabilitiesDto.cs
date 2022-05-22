@@ -7,12 +7,12 @@ public class AddAvailabilitiesDtoValidator : AbstractValidator<AddAvailabilities
 {
     public AddAvailabilitiesDtoValidator()
     {
-        RuleFor(dto => dto.Availablities).NotNull().NotEmpty();
-        RuleForEach(dto => dto.Availablities).NotNull().NotEmpty();
+        RuleFor(dto => dto.Availabilities).NotNull().NotEmpty();
+        RuleForEach(dto => dto.Availabilities).NotNull().NotEmpty();
     }
 }
 
 public class AddAvailabilitiesDto
 {
-    public IEnumerable<Availability> Availablities { get; set; }
+    public IEnumerable<Availability> Availabilities { get; set; }
 }

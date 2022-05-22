@@ -202,7 +202,7 @@ public class DoctorController : BaseController
     {
         var currentUserId = RequireUserId();
         var schedules = await Mediator.Send(
-            new AddAvailabilityToScheduleCommand(requestBody.Availablities, id, currentUserId)
+            new AddAvailabilityToScheduleCommand(requestBody.Availabilities, id, currentUserId)
         );
         return Ok(schedules);
     }

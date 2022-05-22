@@ -17,13 +17,13 @@ public class Availability
 
 public class AddAvailabilityToScheduleCommand : IRequest<IEnumerable<ScheduleViewModel>>
 {
-    public IEnumerable<Availability> Availablities { get; }
+    public IEnumerable<Availability> Availabilities { get; }
     public int DoctorId { get; }
     public int CurrentUserId { get; }
 
-    public AddAvailabilityToScheduleCommand(IEnumerable<Availability> availablities, int doctorId, int currentUserId)
+    public AddAvailabilityToScheduleCommand(IEnumerable<Availability> availabilities, int doctorId, int currentUserId)
     {
-        Availablities = availablities;
+        Availabilities = availabilities;
         DoctorId = doctorId;
         CurrentUserId = currentUserId;
     }
@@ -56,7 +56,7 @@ public class
             "You can update only your schedule");
 
         await using var transaction = await ((DbContext)_context).Database.BeginTransactionAsync(cancellationToken);
-        foreach (Availability availability in query.Availablities)
+        foreach (Availability availability in query.Availabilities)
         {
             if (availability.StartDate < DateTime.Now || availability.EndDate < DateTime.Now)
             {
