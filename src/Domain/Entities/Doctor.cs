@@ -78,7 +78,7 @@ public class Doctor : User
         }
     }
 
-    public override string GetFullName() => $"dr. {FirstName} {LastName}";
+    public override string GetFullName() => $"{FirstName} {LastName}";
 
     public void UpdateOfficeLocation(string fullAddress)
     {
