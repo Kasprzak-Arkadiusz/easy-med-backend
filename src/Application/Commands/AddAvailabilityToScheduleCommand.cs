@@ -69,9 +69,9 @@ public class
             }
 
             var doesOverlapped = await _context.Schedules
+                .Where(s => s.DoctorId == query.DoctorId)
                 .AnyAsync(
-                    s => s.DoctorId == query.DoctorId && availability.StartDate < s.EndDate &&
-                         s.StartDate < availability.EndDate,
+                    s => availability.StartDate < s.EndDate && s.StartDate < availability.EndDate,
                     cancellationToken);
 
             if (doesOverlapped)
