@@ -20,6 +20,7 @@ public class AddAvailabilityToScheduleCommand : IRequest<IEnumerable<ScheduleVie
     public IEnumerable<Availability> Availablities { get; }
     public int DoctorId { get; }
     public int CurrentUserId { get; }
+
     public AddAvailabilityToScheduleCommand(IEnumerable<Availability> availablities, int doctorId, int currentUserId)
     {
         Availablities = availablities;
@@ -28,7 +29,9 @@ public class AddAvailabilityToScheduleCommand : IRequest<IEnumerable<ScheduleVie
     }
 }
 
-public class AddAvailabilityToScheduleCommandHandler : IRequestHandler<AddAvailabilityToScheduleCommand, IEnumerable<ScheduleViewModel>>
+public class
+    AddAvailabilityToScheduleCommandHandler : IRequestHandler<AddAvailabilityToScheduleCommand,
+        IEnumerable<ScheduleViewModel>>
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
@@ -66,7 +69,9 @@ public class AddAvailabilityToScheduleCommandHandler : IRequestHandler<AddAvaila
             }
 
             var doesOverlapped = await _context.Schedules
-                .AnyAsync(s => availability.StartDate < s.EndDate && s.StartDate < availability.EndDate,
+                .AnyAsync(
+                    s => s.DoctorId == query.DoctorId && availability.StartDate < s.EndDate &&
+                         s.StartDate < availability.EndDate,
                     cancellationToken);
 
             if (doesOverlapped)
