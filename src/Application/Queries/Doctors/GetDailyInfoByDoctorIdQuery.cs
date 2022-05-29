@@ -2,6 +2,7 @@
 using EasyMed.Application.Common.Interfaces;
 using EasyMed.Application.Services;
 using EasyMed.Application.ViewModels;
+using EasyMed.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -56,16 +57,16 @@ public class GetDailyInfoByDoctorIdQueryHandler : IRequestHandler<GetDailyInfoBy
         };
     }
 
-    private async Task<string?> GetEndOfWorkTimeAsync(int doctorId,
+    private async Task<DateTime?> GetEndOfWorkTimeAsync(int doctorId,
         CancellationToken cancellationToken)
     {
-        var endDates = await _context.Schedules
-            .Where(s => s.DoctorId == doctorId && s.EndDate.Date == DateTime.Today)
-            .OrderBy(s => s.EndDate)
-            .Select(s => s.EndDate)
+        var endDates = await _context.Visits
+            .Where(v => v.DoctorId == doctorId && v.DateTime.Date == DateTime.Today.Date)
+            .OrderBy(v => v.DateTime)
+            .Select(v => v.DateTime)
             .ToListAsync(cancellationToken);
 
-        return endDates.Any() ? endDates.Last().ToString("hh:mm") : null;
+        return endDates.Any() ? endDates.Last().AddMinutes(Visit.GetVisitTimeInMinutes()) : null;
     }
 
     private async Task<int> CountIssuedPrescriptionsTodayAsync(int doctorId, CancellationToken cancellationToken)
